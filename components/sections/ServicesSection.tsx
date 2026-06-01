@@ -221,25 +221,38 @@ export function ServicesSection() {
           const accent = ACCENTS[i % 2]
           const Icon   = ICONS[item.icon] ?? Layout
           const chips  = SERVICE_CHIPS[item.title] ?? []
+          const imgSrc = SERVICE_IMAGE[item.title]
 
           return (
             <div
               key={item.title}
-              className="relative overflow-hidden rounded-2xl border p-5"
+              className="relative overflow-hidden rounded-2xl border p-4"
               style={{ borderColor: `${accent}28`, background: `${accent}06` }}
             >
-              <div className="flex items-center gap-3 mb-3">
+              <div className="flex items-start gap-3 mb-3">
+                {/* Category image thumbnail */}
                 <div
-                  className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0"
-                  style={{ background: `${accent}18`, border: `1px solid ${accent}35` }}
+                  style={{
+                    width: 64, height: 56, borderRadius: 10, overflow: 'hidden', flexShrink: 0,
+                    border: `1px solid ${accent}35`,
+                    background: `${accent}12`,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  }}
                 >
-                  <Icon className="w-4 h-4" style={{ color: accent }} strokeWidth={1.5} />
+                  {imgSrc ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={imgSrc} alt="" draggable={false} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  ) : (
+                    <Icon style={{ color: accent, width: 22, height: 22 }} strokeWidth={1.4} />
+                  )}
                 </div>
-                <h3 className="font-heebo font-bold text-[15px]" style={{ color: accent }}>
-                  {item.title}
-                </h3>
+                <div className="flex-1 min-w-0">
+                  <h3 className="font-heebo font-bold text-[15px] mb-1" style={{ color: accent }}>
+                    {item.title}
+                  </h3>
+                  <p className="font-rubik text-[13px] text-white/55 leading-relaxed">{item.body}</p>
+                </div>
               </div>
-              <p className="font-rubik text-sm text-white/60 leading-relaxed mb-3">{item.body}</p>
               <div className="flex gap-2 flex-wrap">
                 {chips.map(chip => (
                   <span

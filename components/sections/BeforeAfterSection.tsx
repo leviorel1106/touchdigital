@@ -141,6 +141,7 @@ export function BeforeAfterSection() {
             <img
               src={c.before}
               alt=""
+              loading="lazy"
               draggable={false}
               style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', pointerEvents: 'none' }}
             />
@@ -148,6 +149,7 @@ export function BeforeAfterSection() {
             <img
               src={c.after}
               alt=""
+              loading="lazy"
               draggable={false}
               className="mob-after-animate"
               style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', clipPath: 'inset(0 50% 0 0)', pointerEvents: 'none' }}
@@ -219,6 +221,7 @@ export function BeforeAfterSection() {
                   <img
                     src={c.before}
                     alt=""
+                    loading="lazy"
                     draggable={false}
                     style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', pointerEvents: 'none', userSelect: 'none' }}
                   />
@@ -226,6 +229,7 @@ export function BeforeAfterSection() {
                   <img
                     src={c.after}
                     alt=""
+                    loading="lazy"
                     draggable={false}
                     ref={el => { afterImgRefs.current[i] = el }}
                     style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', clipPath: 'inset(0 50% 0 0)', pointerEvents: 'none', userSelect: 'none' }}
