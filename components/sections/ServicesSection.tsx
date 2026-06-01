@@ -1,7 +1,7 @@
 'use client'
+import React from 'react'
 import { motion } from 'framer-motion'
 import { SectionWrapper } from '@/components/ui/SectionWrapper'
-import { FadeInUp } from '@/components/animations/FadeInUp'
 import { Layout, MessageCircle, Video, Search, Palette, Globe } from 'lucide-react'
 import { CONTENT } from '@/lib/constants'
 
@@ -12,21 +12,32 @@ const ICONS: Record<string, React.ElementType> = {
   Instagram: Globe,
 }
 
-const CARD_CONFIG = [
-  { accent: '#2dd4bf', glow: '0 0 40px rgba(45,212,191,0.30)', bg: 'rgba(45,212,191,0.06)', border: 'rgba(45,212,191,0.18)', large: true,  initX: 0,   initY: 60 },
-  { accent: '#a855f7', glow: '0 0 40px rgba(168,85,247,0.30)',  bg: 'rgba(168,85,247,0.06)',  border: 'rgba(168,85,247,0.18)',  large: false, initX: 60,  initY: 0  },
-  { accent: '#ff2d92', glow: '0 0 40px rgba(255,45,146,0.30)',  bg: 'rgba(255,45,146,0.06)',  border: 'rgba(255,45,146,0.18)',  large: false, initX: 0,   initY: 60 },
-  { accent: '#38bdf8', glow: '0 0 40px rgba(56,189,248,0.30)',  bg: 'rgba(56,189,248,0.06)',  border: 'rgba(56,189,248,0.18)',  large: false, initX: -60, initY: 0  },
-  { accent: '#f97316', glow: '0 0 40px rgba(249,115,22,0.30)',  bg: 'rgba(249,115,22,0.06)',  border: 'rgba(249,115,22,0.18)',  large: false, initX: 0,   initY: 60 },
-  { accent: '#d946ef', glow: '0 0 40px rgba(217,70,239,0.30)',  bg: 'rgba(217,70,239,0.06)',  border: 'rgba(217,70,239,0.18)',  large: true,  initX: 0,   initY: 60 },
-]
+// Brand colors only — teal and purple, alternating per card
+const ACCENTS = ['#2dd4bf', '#a855f7']
+
+// Two contextual chips per service, revealed on hover (desktop) or always visible (mobile)
+const SERVICE_CHIPS: Record<string, [string, string]> = {
+  'דפי נחיתה ממירים':       ['עיצוב UI', 'קופי שיווקי'],
+  "צ'אטבוטים שיווקיים":     ['WhatsApp', 'אוטומציה 24/7'],
+  'מייקאובר סושיאל':         ['פייסבוק', 'אינסטגרם'],
+  'עריכת סרטונים':           ['ריילס', 'סטוריז'],
+  'כרטיס Google Business':  ['GBP', 'SEO מקומי'],
+  'מיתוג ויוקרה':            ['לוגו', 'שפה גרפית'],
+}
 
 export function ServicesSection() {
   const { services } = CONTENT
 
   return (
     <SectionWrapper id="services" className="bg-bg-secondary">
-      <FadeInUp className="mb-14">
+      <motion.div
+        initial={{ opacity: 1, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.1 }}
+        transition={{ duration: 0.9, ease: EASE }}
+        className="mb-14 text-right"
+        dir="rtl"
+      >
         <h2
           className="font-heebo font-black text-white"
           style={{
@@ -37,70 +48,91 @@ export function ServicesSection() {
         >
           {services.headline}
         </h2>
-      </FadeInUp>
+      </motion.div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3" dir="rtl">
         {services.items.map((item, i) => {
-          const cfg = CARD_CONFIG[i]
-          const Icon = ICONS[item.icon] ?? Layout
-          const colSpan = cfg.large ? 'sm:col-span-2' : ''
+          const accent = ACCENTS[i % 2]
+          const Icon   = ICONS[item.icon] ?? Layout
+          const chips  = SERVICE_CHIPS[item.title] ?? ['שירות', 'מקצועי']
 
           return (
             <motion.div
               key={item.title}
-              initial={{ opacity: 1, x: cfg.initX, y: cfg.initY }}
-              whileInView={{ opacity: 1, x: 0, y: 0 }}
+              className="group relative overflow-hidden rounded-2xl border cursor-default"
+              style={{ borderColor: 'rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)' }}
+              initial={{ opacity: 1, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.7, delay: i * 0.08, ease: EASE }}
+              transition={{ duration: 0.6, delay: i * 0.07, ease: EASE }}
               whileHover={{
-                y: -8,
-                scale: 1.02,
-                boxShadow: cfg.glow,
-                borderColor: cfg.accent,
-              }}
-              whileTap={{ scale: 0.97 }}
-              className={`relative overflow-hidden rounded-2xl border p-6 cursor-default ${colSpan}`}
-              style={{
-                background: cfg.bg,
-                borderColor: cfg.border,
-                transition: 'border-color 0.2s, box-shadow 0.2s',
+                borderColor: `${accent}55`,
+                boxShadow: `0 8px 32px ${accent}22`,
+                backgroundColor: `${accent}0a`,
+                transition: { duration: 0.25 },
               }}
             >
-              {/* Corner accent blob */}
+              {/* Corner glow */}
               <div
-                className="absolute -top-10 -left-10 w-32 h-32 rounded-full blur-[60px] pointer-events-none opacity-40"
-                style={{ background: cfg.accent }}
+                className="absolute -top-8 -right-8 w-24 h-24 rounded-full blur-[50px] pointer-events-none opacity-10 group-hover:opacity-25 transition-opacity duration-300"
+                style={{ background: accent }}
               />
 
-              <div className="relative z-[1]">
-                {/* Icon */}
+              {/* ── Header — always visible ── */}
+              <div className="relative z-[1] flex items-center gap-3 px-5 py-5">
                 <div
-                  className="w-11 h-11 rounded-xl flex items-center justify-center mb-4"
-                  style={{ background: `${cfg.accent}20`, border: `1px solid ${cfg.accent}30` }}
+                  className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0"
+                  style={{ background: `${accent}18`, border: `1px solid ${accent}35` }}
                 >
-                  <Icon className="w-5 h-5" style={{ color: cfg.accent }} strokeWidth={1.5} />
+                  <Icon className="w-4 h-4" style={{ color: accent }} strokeWidth={1.5} />
                 </div>
 
-                {/* Title */}
                 <h3
-                  className="font-heebo font-bold text-white mb-2"
-                  style={{ fontSize: cfg.large ? 'clamp(18px, 2vw, 24px)' : '16px' }}
+                  className="font-heebo font-bold text-[15px] flex-1 transition-colors duration-300 group-hover:text-white"
+                  style={{ color: accent }}
                 >
                   {item.title}
                 </h3>
 
-                {/* Body — shown on all cards */}
-                <p className="text-text-muted text-[15px] font-rubik font-medium leading-relaxed">
-                  {item.body}
-                </p>
+                <span
+                  className="text-sm opacity-40 group-hover:opacity-80 group-hover:-translate-x-1 transition-all duration-200 select-none"
+                  style={{ color: accent }}
+                >
+                  ←
+                </span>
+              </div>
 
-                {/* Accent line — large cards only */}
-                {cfg.large && (
-                  <div
-                    className="mt-5 h-[2px] w-12 rounded-full"
-                    style={{ background: cfg.accent }}
-                  />
-                )}
+              {/* ── Surprise body ──
+                  Mobile (< md): always visible — no max-h restriction
+                  Desktop (≥ md): hidden by default, slides open on group-hover
+              */}
+              <div
+                className="overflow-hidden md:max-h-0 md:group-hover:max-h-48"
+                style={{ transition: 'max-height 0.4s cubic-bezier(0.23,1,0.32,1)' }}
+              >
+                <div className="relative z-[1] px-5 pb-5">
+                  <p
+                    className="font-rubik text-sm text-white/60 leading-relaxed mb-3 md:opacity-0 md:translate-y-2 md:group-hover:opacity-100 md:group-hover:translate-y-0 transition-all duration-300 delay-75"
+                  >
+                    {item.body}
+                  </p>
+
+                  <div className="flex gap-2 flex-wrap">
+                    {chips.map((chip, ci) => (
+                      <span
+                        key={chip}
+                        className={`text-[11px] font-rubik font-medium px-2.5 py-1 rounded-full md:opacity-0 md:translate-y-1 md:group-hover:opacity-100 md:group-hover:translate-y-0 transition-all duration-300 ${ci === 0 ? 'delay-[150ms]' : 'delay-[220ms]'}`}
+                        style={{
+                          background: `${accent}18`,
+                          border: `1px solid ${accent}35`,
+                          color: accent,
+                        }}
+                      >
+                        {chip}
+                      </span>
+                    ))}
+                  </div>
+                </div>
               </div>
             </motion.div>
           )
