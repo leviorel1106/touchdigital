@@ -112,6 +112,7 @@ function ServiceRow({
               <img
                 src={imgSrc}
                 alt={item.title}
+                loading="lazy"
                 style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 14 }}
               />
             ) : (
@@ -241,7 +242,7 @@ export function ServicesSection() {
                 >
                   {imgSrc ? (
                     // eslint-disable-next-line @next/next/no-img-element
-                    <img src={imgSrc} alt="" draggable={false} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    <img src={imgSrc} alt="" draggable={false} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                   ) : (
                     <Icon style={{ color: accent, width: 22, height: 22 }} strokeWidth={1.4} />
                   )}

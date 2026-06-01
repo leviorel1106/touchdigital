@@ -1,6 +1,6 @@
 'use client'
 import { useRef } from 'react'
-import { motion, useScroll, useMotionValueEvent, useReducedMotion } from 'framer-motion'
+import { motion, useScroll, useMotionValueEvent, useReducedMotion, useTransform } from 'framer-motion'
 import { CONTENT } from '@/lib/constants'
 import { PainBurnCanvas } from './PainBurnCanvas'
 
@@ -86,6 +86,7 @@ const OVERLAY_STYLE: React.CSSProperties = {
 export function PainSection() {
   const desktopRef    = useRef<HTMLDivElement>(null)
   const burnProgressRef = useRef<number>(0)
+  const mobileRef     = useRef<HTMLDivElement>(null)
   const reduce = useReducedMotion()
 
   const { scrollYProgress } = useScroll({
@@ -98,32 +99,61 @@ export function PainSection() {
     burnProgressRef.current = Math.min(1, Math.max(0, raw))
   })
 
+  const { scrollYProgress: mobileScroll } = useScroll({
+    target: mobileRef,
+    offset: ['start start', 'end end'],
+  })
+  const painOpacity = useTransform(mobileScroll, [0.2, 0.8], [1, 0])
+
   const { pain } = CONTENT
 
   return (
     <section id="pain" style={{ position: 'relative' }}>
 
-      {/* ── Mobile: simple full-height section, no WebGL, no fixed panel ── */}
+      {/* ── Mobile: scroll-driven crossfade, no WebGL, no fixed panel ── */}
       <div
+        ref={mobileRef}
         className="mob-only"
-        style={{
-          position: 'relative',
-          minHeight: '100dvh',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'flex-end',
-          overflow: 'hidden',
-        }}
+        style={{ height: reduce ? 'auto' : '250dvh', position: 'relative' }}
       >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/pain-image.png"
-          alt=""
-          aria-hidden
-          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: 1 }}
-        />
-        <div className="absolute inset-0 pointer-events-none" style={OVERLAY_STYLE} />
-        <PainMobileText body={pain.body} />
+        <div
+          style={{
+            position: reduce ? 'relative' : 'sticky',
+            top: 0,
+            height: reduce ? 'auto' : '100dvh',
+            minHeight: reduce ? 600 : undefined,
+            overflow: 'hidden',
+          }}
+        >
+          {/* Layer 1: reveal-image always behind */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/reveal-image.png"
+            alt=""
+            aria-hidden
+            loading="lazy"
+            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: 1 }}
+          />
+
+          {/* Layer 2: pain-image fades out as user scrolls */}
+          <motion.img
+            src="/pain-image.png"
+            alt=""
+            aria-hidden
+            loading="lazy"
+            style={{
+              position: 'absolute', inset: 0, width: '100%', height: '100%',
+              objectFit: 'cover', zIndex: 2,
+              opacity: reduce ? 1 : painOpacity,
+            }}
+          />
+
+          {/* Layer 3: gradient overlay */}
+          <div className="absolute inset-0 pointer-events-none" style={OVERLAY_STYLE} />
+
+          {/* Layer 4: text */}
+          <PainMobileText body={pain.body} />
+        </div>
       </div>
 
       {/* ── Desktop: sticky scroll + WebGL burn ─────────── */}
@@ -147,6 +177,7 @@ export function PainSection() {
             src="/reveal-image.png"
             alt=""
             aria-hidden
+            loading="lazy"
             style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: 1 }}
           />
 
@@ -154,7 +185,7 @@ export function PainSection() {
           {!reduce && <PainBurnCanvas burnProgressRef={burnProgressRef} />}
           {reduce && (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src="/pain-image.png" alt="" aria-hidden
+            <img src="/pain-image.png" alt="" aria-hidden loading="lazy"
               style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: 2 }} />
           )}
 
