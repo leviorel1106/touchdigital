@@ -15,20 +15,28 @@ const ICONS: Record<string, React.ElementType> = {
 const ACCENTS = ['#2dd4bf', '#a855f7']
 
 const SERVICE_CHIPS: Record<string, readonly [string, string, string, string]> = {
-  'דפי נחיתה ממירים':       ['עיצוב UI', 'קופי שיווקי', 'CRO', 'A/B בדיקות'],
-  "צ'אטבוטים שיווקיים":    ['WhatsApp API', 'לידים 24/7', 'אוטומציה', 'Funnels'],
-  'מייקאובר סושיאל':        ['פייסבוק', 'אינסטגרם', 'Brand Kit', 'Highlights'],
-  'עריכת סרטונים':          ['ריילס', 'סטוריז', 'Trending Audio', 'Post-Production'],
-  'כרטיס Google Business': ['GBP', 'SEO מקומי', 'Reviews', 'Maps Ranking'],
-  'מיתוג ויוקרה':           ['לוגו', 'שפה גרפית', 'Color System', 'Typography'],
+  'דפי נחיתה ממירים':    ['עיצוב UI', 'קופי שיווקי', 'CRO', 'A/B בדיקות'],
+  "צ'אטבוטים שיווקיים": ['WhatsApp API', 'לידים 24/7', 'אוטומציה', 'Funnels'],
+  'מייקאובר סושיאל':     ['פייסבוק', 'אינסטגרם', 'Brand Kit', 'Highlights'],
+  'עריכת סרטונים':       ['ריילס', 'סטוריז', 'Trending Audio', 'Post-Production'],
+  'מיתוג ויוקרה':        ['לוגו', 'שפה גרפית', 'Color System', 'Typography'],
 }
 
-// Chips scattered across the row — RTL positions (right-anchored)
+// Chips scattered across the row — RTL positions (right-anchored), at text centerline
 const CHIP_POSITIONS: Array<{ right: string; top: string; rotate: string }> = [
-  { right: '3%',   top: 'calc(50% - 30px)', rotate: '-3deg' },
-  { right: '24%',  top: 'calc(50% + 4px)',  rotate:  '4deg' },
-  { right: '48%',  top: 'calc(50% - 26px)', rotate: '-2deg' },
-  { right: '67%',  top: 'calc(50% - 6px)',  rotate:  '3deg' },
+  { right: '4%',   top: 'calc(50% - 14px)', rotate: '-3deg' },
+  { right: '26%',  top: 'calc(50% + 2px)',  rotate:  '4deg' },
+  { right: '50%',  top: 'calc(50% - 16px)', rotate: '-2deg' },
+  { right: '70%',  top: 'calc(50% + 4px)',  rotate:  '3deg' },
+]
+
+// Burst origin offsets: each chip starts near the icon card center (right~42%, top~-60px from row)
+// and flies out to its final position. Values are approximate pixel offsets.
+const CHIP_BURST: Array<{ x: number; y: number }> = [
+  { x: 340,  y: -70 },  // chip 0 — far right, bursts rightward-up
+  { x: 150,  y: -60 },  // chip 1 — center-right
+  { x: -60,  y: -65 },  // chip 2 — center
+  { x: -250, y: -55 },  // chip 3 — far left, bursts leftward-up
 ]
 
 type ServiceItem = { readonly icon: string; readonly title: string; readonly body: string }
@@ -75,8 +83,8 @@ function ServiceRow({
               bottom: '100%',
               marginBottom: 10,
               right: '42%',
-              width: 112,
-              height: 72,
+              width: 180,
+              height: 120,
               background: `linear-gradient(135deg, ${accent}22, ${accent}0a)`,
               border: `1px solid ${accent}45`,
               borderRadius: 14,
@@ -89,7 +97,7 @@ function ServiceRow({
               pointerEvents: 'none',
             }}
           >
-            <Icon size={32} color={accent} strokeWidth={1.2} />
+            <Icon size={44} color={accent} strokeWidth={1.2} />
           </motion.div>
         )}
       </AnimatePresence>
@@ -97,13 +105,14 @@ function ServiceRow({
       {/* Scattered chips */}
       <AnimatePresence>
         {hovered && chips.map((chip, ci) => {
-          const pos = CHIP_POSITIONS[ci]
+          const pos   = CHIP_POSITIONS[ci]
+          const burst = CHIP_BURST[ci]
           return (
             <motion.span
               key={chip}
-              initial={{ opacity: 0, scale: 0.6, y: 8 }}
-              animate={{ opacity: 1, scale: 1,   y: 0 }}
-              exit={{   opacity: 0, scale: 0.6,   y: 8 }}
+              initial={{ opacity: 0, scale: 0.5, x: burst.x, y: burst.y }}
+              animate={{ opacity: 1, scale: 1,   x: 0,       y: 0       }}
+              exit={{   opacity: 0, scale: 0.5,  x: burst.x, y: burst.y }}
               transition={{ duration: 0.28, delay: ci * 0.055, ease: EASE }}
               style={{
                 position: 'absolute',

@@ -66,7 +66,6 @@ export const CONTENT = {
       { icon: 'MessageCircle',  title: "צ'אטבוטים שיווקיים",   body: 'וואטסאפ + ווב, 24/7, ממיינים לידים.' },
       { icon: 'Instagram',      title: 'מייקאובר סושיאל',       body: 'פייסבוק + אינסטגרם בנראות יוקרתית.' },
       { icon: 'Video',          title: 'עריכת סרטונים',         body: 'ריילס, סטוריז, תוכן שעובד באלגוריתם.' },
-      { icon: 'Search',         title: 'כרטיס Google Business', body: 'GBP מקצועי + אופטימיזציה לחיפוש.' },
       { icon: 'Palette',        title: 'מיתוג ויוקרה',          body: 'לוגו, צבעי מותג, נראות שמובילה.' },
     ],
   },
