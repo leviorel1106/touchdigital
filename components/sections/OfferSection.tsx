@@ -36,6 +36,8 @@ function ScratchCard({ pkg }: { pkg: Package }) {
   const lastPosRef = useRef<{ x: number; y: number } | null>(null)
   const [revealed,  setRevealed]  = useState(false)
   const [scratching, setScratching] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
+  useEffect(() => { setIsMobile(window.innerWidth < 768) }, [])
 
   /* Draw lottery-card scratch surface onto canvas */
   const drawSurface = useCallback((canvas: HTMLCanvasElement, accent: string) => {
@@ -275,8 +277,8 @@ function ScratchCard({ pkg }: { pkg: Package }) {
           overflow: 'hidden',
           border: `1.5px solid ${pkg.accent}55`,
           background: 'rgba(7, 10, 32, 0.94)',
-          backdropFilter: 'blur(20px)',
-          WebkitBackdropFilter: 'blur(20px)',
+          backdropFilter: isMobile ? 'none' : 'blur(20px)',
+          WebkitBackdropFilter: isMobile ? 'none' : 'blur(20px)',
           boxShadow: `0 24px 64px rgba(0,0,0,0.65), inset 0 1px 0 ${pkg.accent}25, inset 0 -1px 0 rgba(0,0,0,0.4)`,
         }}
       >

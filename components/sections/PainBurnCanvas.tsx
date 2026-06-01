@@ -209,12 +209,22 @@ export function PainBurnCanvas({ burnProgressRef }: Props) {
     const ro = new ResizeObserver(resize)
     ro.observe(canvas)
 
+    // ── Pause RAF when canvas is off-screen ──
+    let visible = false
+    const io = new IntersectionObserver(
+      ([entry]) => { visible = entry.isIntersecting },
+      { rootMargin: '100px' }
+    )
+    io.observe(canvas)
+
     // ── RAF render loop ──
     let raf = 0
     let startTime = performance.now()
 
     function render() {
       raf = requestAnimationFrame(render)
+      if (!visible) return
+
       resize()
 
       const t = (performance.now() - startTime) / 1000
@@ -236,6 +246,7 @@ export function PainBurnCanvas({ burnProgressRef }: Props) {
     return () => {
       cancelAnimationFrame(raf)
       ro.disconnect()
+      io.disconnect()
       gl.deleteTexture(tex)
       gl.deleteBuffer(buf)
       gl.deleteProgram(prog)
