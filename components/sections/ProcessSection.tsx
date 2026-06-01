@@ -151,6 +151,7 @@ export function ProcessSection() {
                     alignItems: 'center',
                     position: 'relative',
                     zIndex: 1,
+                    height: '100%',   // fill CSS grid row = equal height for all columns
                   }}
                 >
                   {/* Dot */}
@@ -170,7 +171,7 @@ export function ProcessSection() {
                     }}
                   />
 
-                  {/* Card */}
+                  {/* Card — flex:1 stretches to match the tallest card in the row */}
                   <motion.div
                     animate={{
                       borderColor: isActive ? `${step.color}55` : 'rgba(255,255,255,0.08)',
@@ -180,41 +181,59 @@ export function ProcessSection() {
                     }}
                     transition={{ duration: 0.5, ease: 'easeOut' }}
                     style={{
+                      flex: 1,
                       width: '100%',
                       background: 'rgba(255,255,255,0.025)',
                       borderWidth: 1, borderStyle: 'solid',
                       borderRadius: 16,
-                      padding: '22px 18px',
+                      padding: '24px 20px',
                       textAlign: 'right',
                       position: 'relative',
                       overflow: 'hidden',
+                      display: 'flex',
+                      flexDirection: 'column',
                     }}
                   >
-                    {/* Ghost number */}
+                    {/* Ghost number — bottom corner watermark */}
                     <span
                       aria-hidden
                       style={{
-                        position: 'absolute', bottom: -18, left: -6,
-                        fontSize: '5.5rem', fontWeight: 900, lineHeight: 1,
-                        color: 'rgba(255,255,255,0.05)', pointerEvents: 'none',
+                        position: 'absolute', bottom: -14, left: -4,
+                        fontSize: '6rem', fontWeight: 900, lineHeight: 1,
+                        color: 'rgba(255,255,255,0.045)', pointerEvents: 'none',
                         fontFamily: 'var(--font-heebo)', userSelect: 'none',
+                        letterSpacing: '-0.04em',
                       }}
                     >
                       {step.num}
                     </span>
 
-                    {/* Icon */}
+                    {/* Premium icon badge */}
                     <motion.div
-                      animate={{ scale: isActive ? 1.12 : 1 }}
-                      transition={{ duration: 0.35, ease: 'easeOut' }}
+                      animate={{
+                        scale: isActive ? 1.08 : 1,
+                        boxShadow: isActive
+                          ? `0 0 28px ${step.color}35, inset 0 1px 0 rgba(255,255,255,0.14)`
+                          : 'inset 0 1px 0 rgba(255,255,255,0.06)',
+                      }}
+                      transition={{ duration: 0.4, ease: 'easeOut' }}
                       style={{
-                        width: 38, height: 38, borderRadius: 11, marginBottom: 14,
-                        background: `${step.color}18`,
+                        width: 58, height: 58, borderRadius: 18,
+                        background: `linear-gradient(145deg, ${step.color}28 0%, ${step.color}08 100%)`,
                         border: `1px solid ${step.color}40`,
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        marginBottom: 18, flexShrink: 0,
+                        position: 'relative', overflow: 'hidden',
                       }}
                     >
-                      <step.Icon size={18} color={step.color} strokeWidth={1.5} />
+                      {/* Inner top shimmer — faux glass highlight */}
+                      <div style={{
+                        position: 'absolute', top: 0, left: 0, right: 0, height: '52%',
+                        background: 'linear-gradient(to bottom, rgba(255,255,255,0.1) 0%, transparent 100%)',
+                        borderRadius: '18px 18px 0 0',
+                        pointerEvents: 'none',
+                      }} />
+                      <step.Icon size={26} color={step.color} strokeWidth={1.25} />
                     </motion.div>
 
                     <h3
@@ -328,18 +347,25 @@ export function ProcessSection() {
                   {step.num}
                 </span>
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>
                   <motion.div
-                    animate={{ scale: isActive ? 1.1 : 1 }}
+                    animate={{ scale: isActive ? 1.08 : 1 }}
                     transition={{ duration: 0.3 }}
                     style={{
-                      width: 32, height: 32, borderRadius: 9, flexShrink: 0,
-                      background: `${step.color}18`,
-                      border: `1px solid ${step.color}38`,
+                      width: 44, height: 44, borderRadius: 14, flexShrink: 0,
+                      background: `linear-gradient(145deg, ${step.color}28 0%, ${step.color}08 100%)`,
+                      border: `1px solid ${step.color}40`,
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      position: 'relative', overflow: 'hidden',
+                      boxShadow: isActive ? `0 0 18px ${step.color}30` : 'none',
                     }}
                   >
-                    <step.Icon size={15} color={step.color} strokeWidth={1.5} />
+                    <div style={{
+                      position: 'absolute', top: 0, left: 0, right: 0, height: '50%',
+                      background: 'linear-gradient(to bottom, rgba(255,255,255,0.1) 0%, transparent 100%)',
+                      borderRadius: '14px 14px 0 0', pointerEvents: 'none',
+                    }} />
+                    <step.Icon size={20} color={step.color} strokeWidth={1.3} />
                   </motion.div>
                   <h3
                     className="font-heebo font-bold text-white"
