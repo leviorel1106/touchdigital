@@ -135,9 +135,11 @@ function createProgram(gl: WebGLRenderingContext, vert: string, frag: string): W
 
 interface Props {
   burnProgressRef: React.RefObject<number>
+  maxDpr?: number
+  maxFps?: number
 }
 
-export function PainBurnCanvas({ burnProgressRef }: Props) {
+export function PainBurnCanvas({ burnProgressRef, maxDpr, maxFps }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
   useEffect(() => {
@@ -197,8 +199,9 @@ export function PainBurnCanvas({ burnProgressRef }: Props) {
 
     // ── Resize ──
     function resize() {
-      const w = canvas!.clientWidth * window.devicePixelRatio
-      const h = canvas!.clientHeight * window.devicePixelRatio
+      const dpr = maxDpr ? Math.min(window.devicePixelRatio, maxDpr) : window.devicePixelRatio
+      const w = canvas!.clientWidth * dpr
+      const h = canvas!.clientHeight * dpr
       if (canvas!.width !== w || canvas!.height !== h) {
         canvas!.width  = w
         canvas!.height = h
@@ -220,14 +223,20 @@ export function PainBurnCanvas({ burnProgressRef }: Props) {
     // ── RAF render loop ──
     let raf = 0
     let startTime = performance.now()
+    let lastDraw = 0
+    const frameInterval = maxFps ? 1000 / maxFps : 0
 
     function render() {
       raf = requestAnimationFrame(render)
       if (!visible) return
 
+      const now = performance.now()
+      if (frameInterval > 0 && now - lastDraw < frameInterval) return
+      lastDraw = now
+
       resize()
 
-      const t = (performance.now() - startTime) / 1000
+      const t = (now - startTime) / 1000
       const burn = burnProgressRef.current ?? 0
 
       gl!.clear(gl!.COLOR_BUFFER_BIT)

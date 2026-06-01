@@ -1,6 +1,6 @@
 'use client'
 import { useRef } from 'react'
-import { motion, useScroll, useMotionValueEvent, useReducedMotion, useTransform } from 'framer-motion'
+import { motion, useScroll, useMotionValueEvent, useReducedMotion } from 'framer-motion'
 import { CONTENT } from '@/lib/constants'
 import { PainBurnCanvas } from './PainBurnCanvas'
 
@@ -86,7 +86,8 @@ const OVERLAY_STYLE: React.CSSProperties = {
 export function PainSection() {
   const desktopRef    = useRef<HTMLDivElement>(null)
   const burnProgressRef = useRef<number>(0)
-  const mobileRef     = useRef<HTMLDivElement>(null)
+  const mobileRef      = useRef<HTMLDivElement>(null)
+  const mobileBurnRef  = useRef<number>(0)
   const reduce = useReducedMotion()
 
   const { scrollYProgress } = useScroll({
@@ -103,7 +104,10 @@ export function PainSection() {
     target: mobileRef,
     offset: ['start start', 'end end'],
   })
-  const painOpacity = useTransform(mobileScroll, [0.2, 0.8], [1, 0])
+  useMotionValueEvent(mobileScroll, 'change', (v) => {
+    const raw = (v - 0.08) / 0.84
+    mobileBurnRef.current = Math.min(1, Math.max(0, raw))
+  })
 
   const { pain } = CONTENT
 
@@ -135,18 +139,13 @@ export function PainSection() {
             style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: 1 }}
           />
 
-          {/* Layer 2: pain-image fades out as user scrolls */}
-          <motion.img
-            src="/pain-image.png"
-            alt=""
-            aria-hidden
-            loading="lazy"
-            style={{
-              position: 'absolute', inset: 0, width: '100%', height: '100%',
-              objectFit: 'cover', zIndex: 2,
-              opacity: reduce ? 1 : painOpacity,
-            }}
-          />
+          {/* Layer 2: WebGL burn canvas (mobile, capped DPR+FPS) */}
+          {!reduce && <PainBurnCanvas burnProgressRef={mobileBurnRef} maxDpr={1.5} maxFps={30} />}
+          {reduce && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src="/pain-image.png" alt="" aria-hidden loading="lazy"
+              style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: 2 }} />
+          )}
 
           {/* Layer 3: gradient overlay */}
           <div className="absolute inset-0 pointer-events-none" style={OVERLAY_STYLE} />
