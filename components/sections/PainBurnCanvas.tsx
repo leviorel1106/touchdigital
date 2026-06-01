@@ -22,6 +22,7 @@ uniform sampler2D u_image;
 uniform float u_burn;        // 0 = unburned, 1 = fully burned
 uniform float u_time;
 uniform float u_aspect;
+uniform float u_image_aspect;
 
 float random(vec2 st) {
   return fract(sin(dot(st, vec2(12.9898, 78.233))) * 43758.5453);
@@ -71,7 +72,16 @@ void main() {
   float lower = mainEdge - localThickness * 0.4;
   float upper = mainEdge + localThickness * 0.6;
 
-  vec4 img = texture2D(u_image, v_uv);
+  // Cover UV: maintain image aspect ratio (like CSS object-fit: cover)
+  vec2 coverUV;
+  if (u_aspect < u_image_aspect) {
+    float frac = u_aspect / u_image_aspect;
+    coverUV = vec2(0.5 + (v_uv.x - 0.5) * frac, v_uv.y);
+  } else {
+    float frac = u_image_aspect / u_aspect;
+    coverUV = vec2(v_uv.x, 0.5 + (v_uv.y - 0.5) * frac);
+  }
+  vec4 img = texture2D(u_image, coverUV);
 
   if (v_uv.y < lower) {
     // Burned — transparent, reveals the image behind the canvas
@@ -171,7 +181,9 @@ export function PainBurnCanvas({ burnProgressRef, maxDpr, maxFps }: Props) {
     const uBurn   = gl.getUniformLocation(prog, 'u_burn')
     const uTime   = gl.getUniformLocation(prog, 'u_time')
     const uAspect = gl.getUniformLocation(prog, 'u_aspect')
-    const uImage  = gl.getUniformLocation(prog, 'u_image')
+    const uImage       = gl.getUniformLocation(prog, 'u_image')
+    const uImageAspect = gl.getUniformLocation(prog, 'u_image_aspect')
+    gl.uniform1f(uImageAspect, 16.0 / 9.0) // default until image loads
 
     // ── Texture ──
     const tex = gl.createTexture()!
@@ -189,6 +201,7 @@ export function PainBurnCanvas({ burnProgressRef, maxDpr, maxFps }: Props) {
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE)
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR)
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR)
+      gl.uniform1f(uImageAspect, img.naturalWidth / img.naturalHeight)
     }
     img.src = '/pain-image.png'
 
