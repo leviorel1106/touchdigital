@@ -14,6 +14,14 @@ const ICONS: Record<string, React.ElementType> = {
 
 const ACCENTS = ['#2dd4bf', '#a855f7']
 
+const SERVICE_IMAGE: Record<string, string> = {
+  'דפי נחיתה ממירים':    '/pic/landing page.png',
+  "צ'אטבוטים שיווקיים": '/pic/automation.png',
+  'מייקאובר סושיאל':     '/pic/makeover.png',
+  'עריכת סרטונים':       '/pic/editing.png',
+  'מיתוג ויוקרה':        '/pic/branding.png',
+}
+
 const SERVICE_CHIPS: Record<string, readonly [string, string, string, string]> = {
   'דפי נחיתה ממירים':    ['עיצוב UI', 'קופי שיווקי', 'CRO', 'A/B בדיקות'],
   "צ'אטבוטים שיווקיים": ['WhatsApp API', 'לידים 24/7', 'אוטומציה', 'Funnels'],
@@ -51,8 +59,9 @@ function ServiceRow({
   index: number
 }) {
   const [hovered, setHovered] = useState(false)
-  const Icon  = ICONS[item.icon] ?? Layout
-  const chips = SERVICE_CHIPS[item.title] ?? ['שירות', 'מקצועי', 'מוביל', 'דיגיטלי'] as const
+  const Icon   = ICONS[item.icon] ?? Layout
+  const chips  = SERVICE_CHIPS[item.title] ?? ['שירות', 'מקצועי', 'מוביל', 'דיגיטלי'] as const
+  const imgSrc = SERVICE_IMAGE[item.title]
 
   return (
     <motion.div
@@ -95,9 +104,19 @@ function ServiceRow({
               backdropFilter: 'blur(10px)',
               boxShadow: `0 8px 28px ${accent}28, inset 0 1px 0 rgba(255,255,255,0.06)`,
               pointerEvents: 'none',
+              overflow: 'hidden',
             }}
           >
-            <Icon size={44} color={accent} strokeWidth={1.2} />
+            {imgSrc ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={imgSrc}
+                alt={item.title}
+                style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 14 }}
+              />
+            ) : (
+              <Icon size={44} color={accent} strokeWidth={1.2} />
+            )}
           </motion.div>
         )}
       </AnimatePresence>
