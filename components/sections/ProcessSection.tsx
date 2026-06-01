@@ -167,6 +167,8 @@ export function ProcessSection() {
                     style={{
                       width: 20, height: 20, borderRadius: '50%',
                       borderWidth: 2, borderStyle: 'solid',
+                      borderColor: 'rgba(255,255,255,0.2)',
+                      background: '#0a0b14',
                       flexShrink: 0, marginBottom: 24,
                     }}
                   />
@@ -185,6 +187,7 @@ export function ProcessSection() {
                       width: '100%',
                       background: 'rgba(255,255,255,0.025)',
                       borderWidth: 1, borderStyle: 'solid',
+                      borderColor: 'rgba(255,255,255,0.08)',
                       borderRadius: 16,
                       padding: '24px 20px',
                       textAlign: 'right',
@@ -312,6 +315,8 @@ export function ProcessSection() {
                 style={{
                   width: 20, height: 20, borderRadius: '50%',
                   borderWidth: 2, borderStyle: 'solid',
+                  borderColor: 'rgba(255,255,255,0.2)',
+                  background: '#05060A',
                   flexShrink: 0, marginTop: 3,
                 }}
               />
@@ -327,6 +332,7 @@ export function ProcessSection() {
                   flex: 1,
                   background: 'rgba(255,255,255,0.03)',
                   borderWidth: 1, borderStyle: 'solid',
+                  borderColor: 'rgba(255,255,255,0.08)',
                   borderRadius: 14,
                   padding: '16px 14px',
                   textAlign: 'right',

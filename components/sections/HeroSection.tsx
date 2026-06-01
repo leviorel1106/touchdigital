@@ -17,12 +17,11 @@ export function HeroSection() {
 
   return (
     <section ref={ref} className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden">
-      {/* Video background — desktop only; mobile uses gradient overlay alone */}
+      {/* Video background */}
       <video
         src="/hero-video.mp4"
         autoPlay muted loop playsInline
         preload="none"
-        className="desk-only"
         style={{
           position: 'absolute',
           top: 0,
