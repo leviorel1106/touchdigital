@@ -72,15 +72,12 @@ void main() {
   float lower = mainEdge - localThickness * 0.4;
   float upper = mainEdge + localThickness * 0.6;
 
-  // Cover UV: maintain image aspect ratio (like CSS object-fit: cover)
-  vec2 coverUV;
-  if (u_aspect < u_image_aspect) {
-    float frac = u_aspect / u_image_aspect;
-    coverUV = vec2(0.5 + (v_uv.x - 0.5) * frac, v_uv.y);
-  } else {
-    float frac = u_image_aspect / u_aspect;
-    coverUV = vec2(v_uv.x, 0.5 + (v_uv.y - 0.5) * frac);
-  }
+  // Cover UV: object-fit:cover — branchless, compatible with all GLSL ES 1.00 compilers
+  float ratio = u_aspect / u_image_aspect;
+  vec2 coverUV = vec2(
+    0.5 + (v_uv.x - 0.5) * min(ratio, 1.0),
+    0.5 + (v_uv.y - 0.5) * min(1.0 / ratio, 1.0)
+  );
   vec4 img = texture2D(u_image, coverUV);
 
   if (v_uv.y < lower) {
