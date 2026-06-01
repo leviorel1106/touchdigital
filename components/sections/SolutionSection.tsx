@@ -125,9 +125,7 @@ export function SolutionSection() {
                 whileTap={{ scale: 0.97 }}
                 className="relative flex flex-col gap-3 rounded-2xl border p-5 cursor-default overflow-hidden"
                 style={{
-                  background: 'rgba(7, 7, 11, 0.78)',
-                  backdropFilter: 'blur(14px)',
-                  WebkitBackdropFilter: 'blur(14px)',
+                  background: 'rgba(7, 7, 11, 0.88)',
                   borderColor: 'rgba(255,255,255,0.10)',
                   transition: 'border-color 0.25s, box-shadow 0.25s, transform 0.25s',
                 }}

@@ -106,17 +106,22 @@ export function RotatingWord({ words, interval = 3500, className = '' }: Props) 
   const anchorRef   = useRef<HTMLSpanElement>(null)
   const reduce      = useReducedMotion()
   const [fallback, setFallback] = useState(0)
+  const [isMobile, setIsMobile] = useState(false)
 
-  /* ── Reduced-motion fallback ─────────────────────────────────── */
   useEffect(() => {
-    if (!reduce) return
+    setIsMobile(window.innerWidth < 768)
+  }, [])
+
+  /* ── Reduced-motion / mobile fallback ───────────────────────── */
+  useEffect(() => {
+    if (!reduce && !isMobile) return
     const id = setInterval(() => setFallback(i => (i + 1) % words.length), interval)
     return () => clearInterval(id)
-  }, [reduce, words.length, interval])
+  }, [reduce, isMobile, words.length, interval])
 
   /* ── Canvas particle loop ────────────────────────────────────── */
   useEffect(() => {
-    if (reduce) return
+    if (reduce || isMobile) return
     const canvas = canvasRef.current
     const anchor = anchorRef.current
     if (!canvas || !anchor) return
@@ -198,10 +203,7 @@ export function RotatingWord({ words, interval = 3500, className = '' }: Props) 
     ro.observe(anchor!)
 
     /* tick */
-    let last = performance.now()
-
     function tick(now: number) {
-      last = now
       const ctx     = canvas!.getContext('2d')!
       const dpr     = window.devicePixelRatio || 1
       const elapsed = now - phaseStart
@@ -263,8 +265,8 @@ export function RotatingWord({ words, interval = 3500, className = '' }: Props) 
     return () => { cancelAnimationFrame(raf); ro.disconnect() }
   }, [reduce, words, interval])
 
-  /* ── Reduced-motion render ───────────────────────────────────── */
-  if (reduce) {
+  /* ── Reduced-motion / mobile render ─────────────────────────── */
+  if (reduce || isMobile) {
     return (
       <span className={`inline-block ${className}`} style={{ minWidth: '6ch' }}>
         <span style={GRADIENT_STYLE}>{words[fallback]}</span>
