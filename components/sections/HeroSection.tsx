@@ -16,12 +16,12 @@ export function HeroSection() {
   const opacity = useTransform(scrollYProgress, [0, 0.75], [1, 0])
 
   return (
-    <section ref={ref} className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden">
+    <section ref={ref} className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden" style={{ background: 'var(--bg-primary)' }}>
       {/* Video background */}
       <video
         src="/hero-video.mp4"
         autoPlay muted loop playsInline
-        preload="none"
+        preload="metadata"
         style={{
           position: 'absolute',
           top: 0,
