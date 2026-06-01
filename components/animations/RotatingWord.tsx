@@ -138,7 +138,7 @@ export function RotatingWord({ words, interval = 3500, className = '' }: Props) 
       const dpr   = window.devicePixelRatio || 1
       return {
         w:    Math.max(rect.width + 28, 180),
-        h:    Math.max(rect.height, 60),
+        h:    rect.height,
         font: `${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`,
         dpr,
       }

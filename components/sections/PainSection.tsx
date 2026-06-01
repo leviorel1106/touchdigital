@@ -130,7 +130,7 @@ export function PainSection() {
   const { pain } = CONTENT
 
   return (
-    <section id="pain" style={{ position: 'relative', zIndex: 10 }}>
+    <section id="pain" style={{ position: 'relative' }}>
 
       {/* ── Mobile: fixed panel + scroll spacer ── */}
       {/* Spacer provides 250dvh scroll room; panel is position:fixed (always works on iOS Safari) */}
@@ -139,7 +139,7 @@ export function PainSection() {
       <div
         className="mob-only"
         ref={mobilePanelRef}
-        style={{ position: 'fixed', inset: 0, zIndex: 8, visibility: 'hidden' }}
+        style={{ position: 'fixed', inset: 0, zIndex: 50, visibility: 'hidden' }}
       >
           {/* Layer 1: reveal image — revealed as canvas burns away */}
           {/* eslint-disable-next-line @next/next/no-img-element */}

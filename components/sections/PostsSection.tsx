@@ -15,7 +15,6 @@ const ROWS = [
   { posts: rotate(ALL_POSTS, 0),  reverse: false },
   { posts: rotate(ALL_POSTS, 8),  reverse: true  },
   { posts: rotate(ALL_POSTS, 4),  reverse: false },
-  { posts: rotate(ALL_POSTS, 12), reverse: true  },
 ]
 
 function PostCard({ src }: { src: string }) {
@@ -72,7 +71,7 @@ export function PostsSection() {
           gap: 10,
           padding: '10px 0',
           overflow: 'hidden',
-          opacity: 0.75,
+          opacity: 0.88,
           zIndex: 0,
         }}
       >
@@ -125,9 +124,9 @@ export function PostsSection() {
 
       {/* ── Gradient overlays — fade grid into bg ── */}
       {/* top */}
-      <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(to bottom, ${BG} 0%, rgba(17,22,56,0.7) 28%, transparent 50%)`, zIndex: 2, pointerEvents: 'none' }} />
+      <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(to bottom, ${BG} 0%, rgba(17,22,56,0.5) 18%, transparent 32%)`, zIndex: 2, pointerEvents: 'none' }} />
       {/* bottom */}
-      <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(to top, ${BG} 0%, rgba(17,22,56,0.7) 28%, transparent 50%)`, zIndex: 2, pointerEvents: 'none' }} />
+      <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(to top, ${BG} 0%, rgba(17,22,56,0.5) 18%, transparent 32%)`, zIndex: 2, pointerEvents: 'none' }} />
       {/* left */}
       <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(to right, ${BG} 0%, transparent 20%)`, zIndex: 2, pointerEvents: 'none' }} />
       {/* right */}
