@@ -272,9 +272,9 @@ export function RotatingWord({ words, interval = 3500, className = '' }: Props) 
         <AnimatePresence mode="wait">
           <motion.span
             key={fallback}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
+            initial={{ opacity: 1 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             transition={{ duration: 0.38, ease: [0.23, 1, 0.32, 1] }}
             style={{ ...GRADIENT_STYLE, display: 'inline-block' }}
           >

@@ -62,7 +62,7 @@ export function HeroSection() {
         className="relative z-[3] text-center max-w-4xl mx-auto px-6 pt-28 pb-20"
       >
         <motion.h1
-          initial={{ opacity: 0, y: 56 }}
+          initial={{ opacity: 1, y: 0 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.0, delay: 0.08, ease: EASE }}
           className="font-heebo font-black text-white leading-[1.05] mb-6"
@@ -78,7 +78,7 @@ export function HeroSection() {
         </motion.h1>
 
         <motion.p
-          initial={{ opacity: 0, y: 36 }}
+          initial={{ opacity: 1, y: 0 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, delay: 0.3, ease: EASE }}
           className="text-text-secondary text-xl leading-relaxed max-w-xl mx-auto mb-10 font-rubik font-medium"
@@ -88,7 +88,7 @@ export function HeroSection() {
 
         {/* CTA with pulsing glow ring */}
         <motion.div
-          initial={{ opacity: 0, y: 28 }}
+          initial={{ opacity: 1, y: 0 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, delay: 0.46, ease: EASE }}
           style={{ position: 'relative', display: 'inline-flex' }}
