@@ -123,10 +123,12 @@ export function PostsSection() {
       </div>
 
       {/* ── Gradient overlays — fade grid into bg ── */}
-      {/* top */}
-      <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(to bottom, ${BG} 0%, rgba(17,22,56,0.5) 18%, transparent 32%)`, zIndex: 2, pointerEvents: 'none' }} />
-      {/* bottom */}
-      <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(to top, ${BG} 0%, rgba(17,22,56,0.5) 18%, transparent 32%)`, zIndex: 2, pointerEvents: 'none' }} />
+      {/* Desktop gradients — strong center coverage */}
+      <div className="desk-only" style={{ position: 'absolute', inset: 0, background: `linear-gradient(to bottom, ${BG} 0%, rgba(17,22,56,0.85) 35%, rgba(17,22,56,0.6) 50%, transparent 65%)`, zIndex: 2, pointerEvents: 'none' }} />
+      <div className="desk-only" style={{ position: 'absolute', inset: 0, background: `linear-gradient(to top,   ${BG} 0%, rgba(17,22,56,0.85) 35%, rgba(17,22,56,0.6) 50%, transparent 65%)`, zIndex: 2, pointerEvents: 'none' }} />
+      {/* Mobile gradients — lighter, posts stay visible */}
+      <div className="mob-only" style={{ position: 'absolute', inset: 0, background: `linear-gradient(to bottom, ${BG} 0%, rgba(17,22,56,0.5) 18%, transparent 32%)`, zIndex: 2, pointerEvents: 'none' }} />
+      <div className="mob-only" style={{ position: 'absolute', inset: 0, background: `linear-gradient(to top,   ${BG} 0%, rgba(17,22,56,0.5) 18%, transparent 32%)`, zIndex: 2, pointerEvents: 'none' }} />
       {/* left */}
       <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(to right, ${BG} 0%, transparent 20%)`, zIndex: 2, pointerEvents: 'none' }} />
       {/* right */}
