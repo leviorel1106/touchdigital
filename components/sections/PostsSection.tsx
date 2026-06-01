@@ -62,11 +62,10 @@ export function PostsSection() {
       {/* ── Mobile: 3 animated marquee rows ──────────────── */}
       <div
         aria-hidden
-        className="mob-only"
+        className="mob-flex"
         style={{
           position: 'absolute',
           inset: 0,
-          display: 'flex',
           flexDirection: 'column',
           gap: 10,
           padding: '10px 0',
