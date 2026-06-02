@@ -200,7 +200,7 @@ export function PainBurnCanvas({ burnProgressRef, maxDpr, maxFps }: Props) {
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR)
       gl.uniform1f(uImageAspect, img.naturalWidth / img.naturalHeight)
     }
-    img.src = '/pain-image.png'
+    // img.src set lazily by IntersectionObserver to avoid eager network fetch on page load
 
     // ── Blend for transparency ──
     gl.enable(gl.BLEND)
@@ -222,11 +222,18 @@ export function PainBurnCanvas({ burnProgressRef, maxDpr, maxFps }: Props) {
     const ro = new ResizeObserver(resize)
     ro.observe(canvas)
 
-    // ── Pause RAF when canvas is off-screen ──
+    // ── Pause RAF + lazy-load texture when canvas approaches viewport ──
     let visible = false
+    let textureStarted = false
     const io = new IntersectionObserver(
-      ([entry]) => { visible = entry.isIntersecting },
-      { rootMargin: '100px' }
+      ([entry]) => {
+        visible = entry.isIntersecting
+        if (visible && !textureStarted) {
+          textureStarted = true
+          img.src = '/pain-image.png'
+        }
+      },
+      { rootMargin: '500px' }
     )
     io.observe(canvas)
 
