@@ -14,7 +14,7 @@ function PainTextContent({ body }: { body: string }) {
       style={{ zIndex: 6, maxWidth: '680px', paddingTop: '80px', paddingBottom: '80px' }}
     >
       <motion.h2
-        initial={{ opacity: 1, y: 36 }}
+        initial={{ opacity: 1, y: 0 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.1 }}
         transition={{ duration: 0.9, ease: EASE }}
@@ -41,7 +41,7 @@ function PainTextContent({ body }: { body: string }) {
       </motion.h2>
 
       <motion.p
-        initial={{ opacity: 1, y: 24 }}
+        initial={{ opacity: 1, y: 0 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.1 }}
         transition={{ duration: 0.85, delay: 0.18, ease: EASE }}

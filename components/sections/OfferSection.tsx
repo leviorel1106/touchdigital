@@ -233,7 +233,7 @@ function ScratchCard({ pkg }: { pkg: Package }) {
   return (
     <motion.div
       key={pkg.id}
-      initial={{ opacity: 1, y: 24 }}
+      initial={{ opacity: 1, y: 0 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -16 }}
       transition={{ duration: 0.38, ease: EASE }}

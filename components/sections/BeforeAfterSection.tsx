@@ -91,7 +91,7 @@ export function BeforeAfterSection() {
       {/* Headline */}
       <div className="text-center px-6" style={{ marginBottom: 60 }}>
         <motion.h2
-          initial={{ opacity: 1, y: 36 }}
+          initial={{ opacity: 1, y: 0 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.1 }}
           transition={{ duration: 0.9, ease: EASE }}
@@ -111,7 +111,7 @@ export function BeforeAfterSection() {
         </motion.h2>
 
         <motion.p
-          initial={{ opacity: 1, y: 22 }}
+          initial={{ opacity: 1, y: 0 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.1 }}
           transition={{ duration: 0.8, delay: 0.15, ease: EASE }}

@@ -109,7 +109,7 @@ export function TestimonialsSection() {
   return (
     <SectionWrapper id="testimonials" style={{ background: '#ffffff' }}>
       <motion.div
-        initial={{ opacity: 1, y: 30 }}
+        initial={{ opacity: 1, y: 0 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.1 }}
         transition={{ duration: 0.9, ease: EASE }}
