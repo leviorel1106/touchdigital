@@ -134,8 +134,10 @@ export function BeforeAfterSection() {
               boxShadow: '0 12px 32px rgba(0,0,0,0.6)',
             }}
           >
-            <Image src={c.before} alt="" fill sizes="210px"
-              style={{ objectFit: 'cover', pointerEvents: 'none' }} loading="lazy" draggable={false} />
+            <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
+              <Image src={c.before} alt="" fill sizes="210px"
+                style={{ objectFit: 'cover' }} loading="lazy" draggable={false} />
+            </div>
             <div className="mob-after-animate"
               style={{ position: 'absolute', inset: 0, clipPath: 'inset(0 50% 0 0)', pointerEvents: 'none' }}>
               <Image src={c.after} alt="" fill sizes="210px"
@@ -204,9 +206,10 @@ export function BeforeAfterSection() {
                     boxShadow: '0 24px 64px rgba(0,0,0,0.7)',
                   }}
                 >
-                  <Image src={c.before} alt="" fill sizes="210px"
-                    style={{ objectFit: 'cover', pointerEvents: 'none', userSelect: 'none' }}
-                    loading="lazy" draggable={false} />
+                  <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', userSelect: 'none' }}>
+                    <Image src={c.before} alt="" fill sizes="210px"
+                      style={{ objectFit: 'cover' }} loading="lazy" draggable={false} />
+                  </div>
                   <div ref={el => { afterImgRefs.current[i] = el }}
                     style={{ position: 'absolute', inset: 0, clipPath: 'inset(0 50% 0 0)', pointerEvents: 'none', userSelect: 'none' }}>
                     <Image src={c.after} alt="" fill sizes="210px"

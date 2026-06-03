@@ -135,16 +135,16 @@ export function PainSection() {
           }}
         >
           {/* Layer 1: reveal-image always behind */}
-          <Image src="/reveal-image.png" alt="" aria-hidden fill sizes="100vw"
-            style={{ objectFit: 'cover', zIndex: 1 }} loading="lazy" />
+          <div aria-hidden style={{ position: 'absolute', inset: 0, zIndex: 1 }}>
+            <Image src="/reveal-image.png" alt="" fill sizes="100vw"
+              style={{ objectFit: 'cover' }} loading="lazy" />
+          </div>
 
           {/* Layer 2: CSS opacity crossfade (no WebGL on mobile) */}
           <motion.div
             aria-hidden
-            style={{
-              position: 'absolute', inset: 0, zIndex: 2,
-              opacity: reduce ? 1 : mobileImageOpacity,
-            }}
+            style={{ position: 'absolute', inset: 0, zIndex: 2,
+              opacity: reduce ? 1 : mobileImageOpacity }}
           >
             <Image src="/pain-image.png" alt="" fill sizes="100vw"
               style={{ objectFit: 'cover' }} loading="lazy" />
@@ -174,14 +174,18 @@ export function PainSection() {
           }}
         >
           {/* Layer 1: reveal-image always behind canvas */}
-          <Image src="/reveal-image.png" alt="" aria-hidden fill sizes="100vw"
-            style={{ objectFit: 'cover', zIndex: 1 }} loading="lazy" />
+          <div aria-hidden style={{ position: 'absolute', inset: 0, zIndex: 1 }}>
+            <Image src="/reveal-image.png" alt="" fill sizes="100vw"
+              style={{ objectFit: 'cover' }} loading="lazy" />
+          </div>
 
           {/* Layer 2: WebGL canvas (desktop only — never mounts on mobile) */}
           {isDesktop && !reduce && <PainBurnCanvas burnProgressRef={burnProgressRef} />}
           {reduce && (
-            <Image src="/pain-image.png" alt="" aria-hidden fill sizes="100vw"
-              style={{ objectFit: 'cover', zIndex: 2 }} loading="lazy" />
+            <div aria-hidden style={{ position: 'absolute', inset: 0, zIndex: 2 }}>
+              <Image src="/pain-image.png" alt="" fill sizes="100vw"
+                style={{ objectFit: 'cover' }} loading="lazy" />
+            </div>
           )}
 
           {/* Layer 3: gradient overlay */}
