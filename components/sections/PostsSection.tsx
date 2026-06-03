@@ -36,6 +36,8 @@ function PostCard({ src }: { src: string }) {
         src={src}
         alt=""
         draggable={false}
+        loading="lazy"
+        decoding="async"
         style={{
           width: '100%',
           height: '100%',
@@ -77,21 +79,21 @@ export function PostsSection() {
         <MarqueeStrip>
           {ALL_POSTS.slice(0, 8).map((src, i) => (
             // eslint-disable-next-line @next/next/no-img-element
-            <img key={i} src={src} alt="" draggable={false}
+            <img key={i} src={src} alt="" draggable={false} loading="lazy" decoding="async"
               style={{ height: 200, width: 112, objectFit: 'cover', borderRadius: 10, flexShrink: 0 }} />
           ))}
         </MarqueeStrip>
         <MarqueeStrip reverse>
           {rotate(ALL_POSTS, 8).slice(0, 8).map((src, i) => (
             // eslint-disable-next-line @next/next/no-img-element
-            <img key={i} src={src} alt="" draggable={false}
+            <img key={i} src={src} alt="" draggable={false} loading="lazy" decoding="async"
               style={{ height: 200, width: 112, objectFit: 'cover', borderRadius: 10, flexShrink: 0 }} />
           ))}
         </MarqueeStrip>
         <MarqueeStrip>
           {rotate(ALL_POSTS, 4).slice(0, 8).map((src, i) => (
             // eslint-disable-next-line @next/next/no-img-element
-            <img key={i} src={src} alt="" draggable={false}
+            <img key={i} src={src} alt="" draggable={false} loading="lazy" decoding="async"
               style={{ height: 200, width: 112, objectFit: 'cover', borderRadius: 10, flexShrink: 0 }} />
           ))}
         </MarqueeStrip>

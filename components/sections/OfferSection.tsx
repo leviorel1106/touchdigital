@@ -241,7 +241,9 @@ function ScratchCard({ pkg }: { pkg: Package }) {
     >
       {/* Animated glow border layer */}
       <motion.div
-        animate={{ opacity: [0.45, 0.85, 0.45] }}
+        initial={{ opacity: 0.45 }}
+        whileInView={{ opacity: [0.45, 0.85, 0.45] }}
+        viewport={{ once: false, amount: 0 }}
         transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
         aria-hidden
         style={{
@@ -256,7 +258,9 @@ function ScratchCard({ pkg }: { pkg: Package }) {
       />
       {/* Second softer outer halo */}
       <motion.div
-        animate={{ opacity: [0.2, 0.5, 0.2] }}
+        initial={{ opacity: 0.2 }}
+        whileInView={{ opacity: [0.2, 0.5, 0.2] }}
+        viewport={{ once: false, amount: 0 }}
         transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut', delay: 0.4 }}
         aria-hidden
         style={{

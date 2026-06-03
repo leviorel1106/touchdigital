@@ -1,5 +1,6 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
+import Image from 'next/image'
 import { motion, useReducedMotion } from 'framer-motion'
 
 const EASE = [0.23, 1, 0.32, 1] as const
@@ -33,7 +34,7 @@ const DIVIDER_STYLE: React.CSSProperties = {
 
 export function BeforeAfterSection() {
   const carouselRef  = useRef<HTMLDivElement>(null)
-  const afterImgRefs = useRef<(HTMLImageElement | null)[]>([])
+  const afterImgRefs = useRef<(HTMLDivElement | null)[]>([])
   const dividerRefs  = useRef<(HTMLDivElement | null)[]>([])
   const angleRef     = useRef(0)
   const tRef         = useRef(0)
@@ -56,33 +57,29 @@ export function BeforeAfterSection() {
   useEffect(() => {
     if (reduce) return
 
+    let visible = false
+
     function loop() {
-      if (!paused.current) {
-        angleRef.current -= 0.28
+      if (visible) {
+        if (!paused.current) angleRef.current -= 0.28
+        tRef.current += 0.022
+        const revealPct = 50 + 45 * Math.sin(tRef.current)
+        if (carouselRef.current)
+          carouselRef.current.style.transform = `rotateY(${angleRef.current}deg)`
+        const clipVal = (100 - revealPct).toFixed(2)
+        const leftVal = revealPct.toFixed(2)
+        afterImgRefs.current.forEach(img => { if (img) img.style.clipPath = `inset(0 ${clipVal}% 0 0)` })
+        dividerRefs.current.forEach(line => { if (line) line.style.left = `${leftVal}%` })
       }
-      tRef.current += 0.022
-
-      const revealPct = 50 + 45 * Math.sin(tRef.current)
-
-      if (carouselRef.current) {
-        carouselRef.current.style.transform = `rotateY(${angleRef.current}deg)`
-      }
-
-      const clipVal = (100 - revealPct).toFixed(2)
-      const leftVal = revealPct.toFixed(2)
-
-      afterImgRefs.current.forEach(img => {
-        if (img) img.style.clipPath = `inset(0 ${clipVal}% 0 0)`
-      })
-      dividerRefs.current.forEach(line => {
-        if (line) line.style.left = `${leftVal}%`
-      })
-
       rafRef.current = requestAnimationFrame(loop)
     }
 
     rafRef.current = requestAnimationFrame(loop)
-    return () => cancelAnimationFrame(rafRef.current)
+
+    const io = new IntersectionObserver(([e]) => { visible = e.isIntersecting }, { rootMargin: '200px' })
+    if (carouselRef.current) io.observe(carouselRef.current)
+
+    return () => { cancelAnimationFrame(rafRef.current); io.disconnect() }
   }, [reduce])
 
   return (
@@ -137,23 +134,13 @@ export function BeforeAfterSection() {
               boxShadow: '0 12px 32px rgba(0,0,0,0.6)',
             }}
           >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={c.before}
-              alt=""
-              loading="lazy"
-              draggable={false}
-              style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', pointerEvents: 'none' }}
-            />
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={c.after}
-              alt=""
-              loading="lazy"
-              draggable={false}
-              className="mob-after-animate"
-              style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', clipPath: 'inset(0 50% 0 0)', pointerEvents: 'none' }}
-            />
+            <Image src={c.before} alt="" fill sizes="210px"
+              style={{ objectFit: 'cover', pointerEvents: 'none' }} loading="lazy" draggable={false} />
+            <div className="mob-after-animate"
+              style={{ position: 'absolute', inset: 0, clipPath: 'inset(0 50% 0 0)', pointerEvents: 'none' }}>
+              <Image src={c.after} alt="" fill sizes="210px"
+                style={{ objectFit: 'cover' }} loading="lazy" draggable={false} />
+            </div>
             <div className="mob-divider-animate" style={DIVIDER_STYLE} />
             {/* Badge לפני */}
             <span style={{
@@ -217,23 +204,14 @@ export function BeforeAfterSection() {
                     boxShadow: '0 24px 64px rgba(0,0,0,0.7)',
                   }}
                 >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={c.before}
-                    alt=""
-                    loading="lazy"
-                    draggable={false}
-                    style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', pointerEvents: 'none', userSelect: 'none' }}
-                  />
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={c.after}
-                    alt=""
-                    loading="lazy"
-                    draggable={false}
-                    ref={el => { afterImgRefs.current[i] = el }}
-                    style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', clipPath: 'inset(0 50% 0 0)', pointerEvents: 'none', userSelect: 'none' }}
-                  />
+                  <Image src={c.before} alt="" fill sizes="210px"
+                    style={{ objectFit: 'cover', pointerEvents: 'none', userSelect: 'none' }}
+                    loading="lazy" draggable={false} />
+                  <div ref={el => { afterImgRefs.current[i] = el }}
+                    style={{ position: 'absolute', inset: 0, clipPath: 'inset(0 50% 0 0)', pointerEvents: 'none', userSelect: 'none' }}>
+                    <Image src={c.after} alt="" fill sizes="210px"
+                      style={{ objectFit: 'cover' }} loading="lazy" draggable={false} />
+                  </div>
                   <div
                     ref={el => { dividerRefs.current[i] = el }}
                     style={{

@@ -43,7 +43,7 @@ float noise(vec2 st) {
 float fbm(vec2 st) {
   float v = 0.0;
   float amp = 0.5;
-  for (int i = 0; i < 5; i++) {
+  for (int i = 0; i < 3; i++) {
     v += amp * noise(st);
     st *= 2.2;
     amp *= 0.45;
@@ -156,126 +156,142 @@ export function PainBurnCanvas({ burnProgressRef, maxDpr, maxFps }: Props) {
     const gl = canvas.getContext('webgl', { alpha: true, premultipliedAlpha: false })
     if (!gl) return // WebGL not supported — canvas stays invisible, SVG fallback handled by parent
 
-    // ── GL program ──
-    let prog: WebGLProgram
-    try {
-      prog = createProgram(gl, VERT, FRAG)
-    } catch (e) {
-      console.warn('PainBurnCanvas shader error:', e)
-      return
-    }
-    gl.useProgram(prog)
-
-    // ── Fullscreen quad ──
-    const buf = gl.createBuffer()!
-    gl.bindBuffer(gl.ARRAY_BUFFER, buf)
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW)
-    const aPos = gl.getAttribLocation(prog, 'a_position')
-    gl.enableVertexAttribArray(aPos)
-    gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0)
-
-    // ── Uniforms ──
-    const uBurn   = gl.getUniformLocation(prog, 'u_burn')
-    const uTime   = gl.getUniformLocation(prog, 'u_time')
-    const uAspect = gl.getUniformLocation(prog, 'u_aspect')
-    const uImage       = gl.getUniformLocation(prog, 'u_image')
-    const uImageAspect = gl.getUniformLocation(prog, 'u_image_aspect')
-    gl.uniform1f(uImageAspect, 16.0 / 9.0) // default until image loads
-
-    // ── Texture ──
-    const tex = gl.createTexture()!
-    gl.bindTexture(gl.TEXTURE_2D, tex)
-    // Placeholder 1×1 transparent pixel until image loads
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([0, 0, 0, 0]))
-
-    const img = new Image()
-    img.crossOrigin = 'anonymous'
-    img.onload = () => {
-      gl.bindTexture(gl.TEXTURE_2D, tex)
-      gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true) // flip so v_uv.y=0 = bottom of image
-      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img)
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE)
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE)
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR)
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR)
-      gl.uniform1f(uImageAspect, img.naturalWidth / img.naturalHeight)
-    }
-    // img.src set lazily by IntersectionObserver to avoid eager network fetch on page load
-
-    // ── Blend for transparency ──
-    gl.enable(gl.BLEND)
-    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA)
-    gl.clearColor(0, 0, 0, 0)
-
-    // ── Resize ──
-    function resize() {
-      const dpr = maxDpr ? Math.min(window.devicePixelRatio, maxDpr) : window.devicePixelRatio
-      const w = canvas!.clientWidth * dpr
-      const h = canvas!.clientHeight * dpr
-      if (canvas!.width !== w || canvas!.height !== h) {
-        canvas!.width  = w
-        canvas!.height = h
-        gl!.viewport(0, 0, w, h)
-      }
-    }
-    resize()
-    const ro = new ResizeObserver(resize)
-    ro.observe(canvas)
-
-    // ── Pause RAF + lazy-load texture when canvas approaches viewport ──
-    let visible = false
-    let textureStarted = false
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        visible = entry.isIntersecting
-        if (visible && !textureStarted) {
-          textureStarted = true
-          img.src = '/pain-image.png'
-        }
-      },
-      { rootMargin: '500px' }
-    )
-    io.observe(canvas)
-
-    // ── RAF render loop ──
+    // Deferred GL resources — populated inside idle callback
     let raf = 0
-    let startTime = performance.now()
-    let lastDraw = 0
-    const frameInterval = maxFps ? 1000 / maxFps : 0
+    let ro: ResizeObserver | null = null
+    let io: IntersectionObserver | null = null
+    let buf: WebGLBuffer | null = null
+    let tex: WebGLTexture | null = null
+    let prog: WebGLProgram | null = null
 
-    function render() {
-      raf = requestAnimationFrame(render)
-      if (!visible) return
+    // iOS Safari lacks rIC — fall back to a delayed setTimeout so at least
+    // we give the hero section time to paint before blocking the thread.
+    type RIC = (cb: () => void, opts?: { timeout: number }) => number
+    const rIC: RIC = (window as any).requestIdleCallback
+      ?? ((cb: () => void) => setTimeout(cb, 1500) as unknown as number)
+    const cancelRIC: (id: number) => void =
+      (window as any).cancelIdleCallback ?? clearTimeout
 
-      const now = performance.now()
-      if (frameInterval > 0 && now - lastDraw < frameInterval) return
-      lastDraw = now
+    // Compile shader + start everything during idle time so the main thread
+    // is never blocked while the user is on HeroSection.
+    const idleId = rIC(() => {
+      try {
+        prog = createProgram(gl, VERT, FRAG)
+      } catch (e) {
+        console.warn('PainBurnCanvas shader error:', e)
+        return
+      }
+      gl.useProgram(prog)
 
+      // ── Fullscreen quad ──
+      buf = gl.createBuffer()!
+      gl.bindBuffer(gl.ARRAY_BUFFER, buf)
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW)
+      const aPos = gl.getAttribLocation(prog, 'a_position')
+      gl.enableVertexAttribArray(aPos)
+      gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0)
+
+      // ── Uniforms ──
+      const uBurn        = gl.getUniformLocation(prog, 'u_burn')
+      const uTime        = gl.getUniformLocation(prog, 'u_time')
+      const uAspect      = gl.getUniformLocation(prog, 'u_aspect')
+      const uImage       = gl.getUniformLocation(prog, 'u_image')
+      const uImageAspect = gl.getUniformLocation(prog, 'u_image_aspect')
+      gl.uniform1f(uImageAspect, 16.0 / 9.0) // default until image loads
+
+      // ── Texture ──
+      tex = gl.createTexture()!
+      gl.bindTexture(gl.TEXTURE_2D, tex)
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([0, 0, 0, 0]))
+
+      const img = new Image()
+      img.crossOrigin = 'anonymous'
+      img.onload = () => {
+        gl.bindTexture(gl.TEXTURE_2D, tex!)
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true)
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img)
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE)
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE)
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR)
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR)
+        gl.uniform1f(uImageAspect, img.naturalWidth / img.naturalHeight)
+      }
+
+      // ── Blend ──
+      gl.enable(gl.BLEND)
+      gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA)
+      gl.clearColor(0, 0, 0, 0)
+
+      // ── Resize ──
+      function resize() {
+        const dpr = maxDpr ? Math.min(window.devicePixelRatio, maxDpr) : window.devicePixelRatio
+        const w = canvas!.clientWidth * dpr
+        const h = canvas!.clientHeight * dpr
+        if (canvas!.width !== w || canvas!.height !== h) {
+          canvas!.width  = w
+          canvas!.height = h
+          gl!.viewport(0, 0, w, h)
+        }
+      }
       resize()
+      ro = new ResizeObserver(resize)
+      ro.observe(canvas!)
 
-      const t = (now - startTime) / 1000
-      const burn = burnProgressRef.current ?? 0
+      // ── Pause RAF + lazy-load texture when canvas approaches viewport ──
+      let visible = false
+      let textureStarted = false
+      io = new IntersectionObserver(
+        ([entry]) => {
+          visible = entry.isIntersecting
+          if (visible && !textureStarted) {
+            textureStarted = true
+            img.src = '/pain-image.png'
+          }
+        },
+        { rootMargin: '500px' }
+      )
+      io.observe(canvas!)
 
-      gl!.clear(gl!.COLOR_BUFFER_BIT)
-      gl!.uniform1f(uBurn,   burn)
-      gl!.uniform1f(uTime,   t)
-      gl!.uniform1f(uAspect, canvas!.width / canvas!.height)
-      gl!.uniform1i(uImage,  0)
+      // ── RAF render loop ──
+      let startTime = performance.now()
+      let lastDraw = 0
+      const frameInterval = maxFps ? 1000 / maxFps : 0
 
-      gl!.activeTexture(gl!.TEXTURE0)
-      gl!.bindTexture(gl!.TEXTURE_2D, tex)
+      function render() {
+        raf = requestAnimationFrame(render)
+        if (!visible) return
 
-      gl!.drawArrays(gl!.TRIANGLE_STRIP, 0, 4)
-    }
-    render()
+        const now = performance.now()
+        if (frameInterval > 0 && now - lastDraw < frameInterval) return
+        lastDraw = now
+
+        resize()
+
+        const t = (now - startTime) / 1000
+        const burn = burnProgressRef.current ?? 0
+
+        gl!.clear(gl!.COLOR_BUFFER_BIT)
+        gl!.uniform1f(uBurn,   burn)
+        gl!.uniform1f(uTime,   t)
+        gl!.uniform1f(uAspect, canvas!.width / canvas!.height)
+        gl!.uniform1i(uImage,  0)
+
+        gl!.activeTexture(gl!.TEXTURE0)
+        gl!.bindTexture(gl!.TEXTURE_2D, tex!)
+
+        gl!.drawArrays(gl!.TRIANGLE_STRIP, 0, 4)
+      }
+      render()
+    }, { timeout: 3000 })
 
     return () => {
+      cancelRIC(idleId)
       cancelAnimationFrame(raf)
-      ro.disconnect()
-      io.disconnect()
-      gl.deleteTexture(tex)
-      gl.deleteBuffer(buf)
-      gl.deleteProgram(prog)
+      ro?.disconnect()
+      io?.disconnect()
+      if (tex)  gl.deleteTexture(tex)
+      if (buf)  gl.deleteBuffer(buf)
+      if (prog) gl.deleteProgram(prog)
     }
   }, [burnProgressRef])
 

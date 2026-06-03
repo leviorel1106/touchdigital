@@ -1,5 +1,6 @@
 'use client'
 import { useEffect, useRef } from 'react'
+import Image from 'next/image'
 import { useReducedMotion } from 'framer-motion'
 
 const CURSOR_ICON = '/icons/fp1.png'
@@ -58,12 +59,8 @@ export function CustomCursor() {
         willChange: 'transform',
       }}
     >
-      <img
-        src={CURSOR_ICON}
-        alt=""
-        draggable={false}
-        style={{ width: '100%', height: '100%', display: 'block', borderRadius: '50%' }}
-      />
+      <Image src={CURSOR_ICON} alt="" width={SIZE} height={SIZE}
+        draggable={false} style={{ display: 'block', borderRadius: '50%' }} />
     </div>
   )
 }

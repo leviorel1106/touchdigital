@@ -1,6 +1,6 @@
 'use client'
-import React from 'react'
-import { motion, useReducedMotion } from 'framer-motion'
+import React, { useRef } from 'react'
+import { motion, useReducedMotion, useInView } from 'framer-motion'
 import { SectionWrapper } from '@/components/ui/SectionWrapper'
 import { MarqueeStrip } from '@/components/animations/MarqueeStrip'
 import { CONTENT } from '@/lib/constants'
@@ -73,10 +73,13 @@ function TestimonialsColumn({
   className?: string
 }) {
   const reduce = useReducedMotion()
+  const ref = useRef<HTMLDivElement>(null)
+  const inView = useInView(ref, { once: false, margin: '200px 0px' })
+
   return (
-    <div className={`overflow-hidden ${className}`}>
+    <div ref={ref} className={`overflow-hidden ${className}`}>
       <motion.ul
-        animate={reduce ? {} : { translateY: '-50%' }}
+        animate={reduce || !inView ? {} : { translateY: '-50%' }}
         transition={{
           duration,
           repeat: Infinity,

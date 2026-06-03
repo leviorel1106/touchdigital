@@ -1,5 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
@@ -91,8 +92,7 @@ export function Header() {
               }}
               aria-label="כל הפרויקטים"
             >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/icons/fp1.png" alt="" style={{ width: 22, height: 22, opacity: 0.85 }} />
+              <Image src="/icons/fp1.png" alt="" width={22} height={22} style={{ opacity: 0.85 }} priority />
             </a>
             <button
               onClick={() => setOpen(v => !v)}

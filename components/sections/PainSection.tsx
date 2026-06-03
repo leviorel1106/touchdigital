@@ -1,6 +1,7 @@
 'use client'
-import { useRef } from 'react'
-import { motion, useScroll, useMotionValueEvent, useReducedMotion } from 'framer-motion'
+import { useRef, useState, useEffect } from 'react'
+import Image from 'next/image'
+import { motion, useScroll, useTransform, useMotionValueEvent, useReducedMotion } from 'framer-motion'
 import { CONTENT } from '@/lib/constants'
 import { PainBurnCanvas } from './PainBurnCanvas'
 
@@ -13,7 +14,7 @@ function PainTextContent({ body }: { body: string }) {
       style={{ zIndex: 6, maxWidth: '680px', paddingTop: '80px', paddingBottom: '80px' }}
     >
       <motion.h2
-        initial={{ opacity: 0, y: 40 }}
+        initial={{ opacity: 1, y: 36 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.1 }}
         transition={{ duration: 0.9, ease: EASE }}
@@ -40,7 +41,7 @@ function PainTextContent({ body }: { body: string }) {
       </motion.h2>
 
       <motion.p
-        initial={{ opacity: 0, y: 28 }}
+        initial={{ opacity: 1, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.1 }}
         transition={{ duration: 0.85, delay: 0.18, ease: EASE }}
@@ -87,8 +88,15 @@ export function PainSection() {
   const desktopRef    = useRef<HTMLDivElement>(null)
   const burnProgressRef = useRef<number>(0)
   const mobileRef      = useRef<HTMLDivElement>(null)
-  const mobileBurnRef  = useRef<number>(0)
   const reduce = useReducedMotion()
+  const [isDesktop, setIsDesktop] = useState(false)
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 768px)')
+    setIsDesktop(mq.matches)
+    const handler = (e: MediaQueryListEvent) => setIsDesktop(e.matches)
+    mq.addEventListener('change', handler)
+    return () => mq.removeEventListener('change', handler)
+  }, [])
 
   const { scrollYProgress } = useScroll({
     target: desktopRef,
@@ -104,10 +112,7 @@ export function PainSection() {
     target: mobileRef,
     offset: ['start start', 'end end'],
   })
-  useMotionValueEvent(mobileScroll, 'change', (v) => {
-    const raw = (v - 0.08) / 0.84
-    mobileBurnRef.current = Math.min(1, Math.max(0, raw))
-  })
+  const mobileImageOpacity = useTransform(mobileScroll, [0.08, 0.92], [1, 0])
 
   const { pain } = CONTENT
 
@@ -130,22 +135,20 @@ export function PainSection() {
           }}
         >
           {/* Layer 1: reveal-image always behind */}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/reveal-image.png"
-            alt=""
-            aria-hidden
-            loading="lazy"
-            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: 1 }}
-          />
+          <Image src="/reveal-image.png" alt="" aria-hidden fill sizes="100vw"
+            style={{ objectFit: 'cover', zIndex: 1 }} loading="lazy" />
 
-          {/* Layer 2: WebGL burn canvas (mobile, capped DPR+FPS) */}
-          {!reduce && <PainBurnCanvas burnProgressRef={mobileBurnRef} maxDpr={1.5} maxFps={30} />}
-          {reduce && (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src="/pain-image.png" alt="" aria-hidden loading="lazy"
-              style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: 2 }} />
-          )}
+          {/* Layer 2: CSS opacity crossfade (no WebGL on mobile) */}
+          <motion.div
+            aria-hidden
+            style={{
+              position: 'absolute', inset: 0, zIndex: 2,
+              opacity: reduce ? 1 : mobileImageOpacity,
+            }}
+          >
+            <Image src="/pain-image.png" alt="" fill sizes="100vw"
+              style={{ objectFit: 'cover' }} loading="lazy" />
+          </motion.div>
 
           {/* Layer 3: gradient overlay */}
           <div className="absolute inset-0 pointer-events-none" style={OVERLAY_STYLE} />
@@ -171,21 +174,14 @@ export function PainSection() {
           }}
         >
           {/* Layer 1: reveal-image always behind canvas */}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/reveal-image.png"
-            alt=""
-            aria-hidden
-            loading="lazy"
-            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: 1 }}
-          />
+          <Image src="/reveal-image.png" alt="" aria-hidden fill sizes="100vw"
+            style={{ objectFit: 'cover', zIndex: 1 }} loading="lazy" />
 
-          {/* Layer 2: WebGL canvas (desktop only) */}
-          {!reduce && <PainBurnCanvas burnProgressRef={burnProgressRef} />}
+          {/* Layer 2: WebGL canvas (desktop only — never mounts on mobile) */}
+          {isDesktop && !reduce && <PainBurnCanvas burnProgressRef={burnProgressRef} />}
           {reduce && (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src="/pain-image.png" alt="" aria-hidden loading="lazy"
-              style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: 2 }} />
+            <Image src="/pain-image.png" alt="" aria-hidden fill sizes="100vw"
+              style={{ objectFit: 'cover', zIndex: 2 }} loading="lazy" />
           )}
 
           {/* Layer 3: gradient overlay */}

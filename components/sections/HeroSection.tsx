@@ -21,7 +21,7 @@ export function HeroSection() {
       <video
         src="/hero-video.mp4"
         autoPlay muted loop playsInline
-        preload="metadata"
+        preload="none"
         style={{
           position: 'absolute',
           top: 0,
