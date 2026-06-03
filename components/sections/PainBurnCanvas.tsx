@@ -175,6 +175,9 @@ export function PainBurnCanvas({ burnProgressRef, maxDpr, maxFps }: Props) {
     // Compile shader + start everything during idle time so the main thread
     // is never blocked while the user is on HeroSection.
     const idleId = rIC(() => {
+      // On mobile (desk-only is CSS-hidden), skip WebGL entirely — saves ~3s on Adreno/Mali
+      if (window.innerWidth < 768) return
+
       try {
         prog = createProgram(gl, VERT, FRAG)
       } catch (e) {

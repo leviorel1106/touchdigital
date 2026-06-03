@@ -1,5 +1,5 @@
 'use client'
-import { useRef, useState, useEffect } from 'react'
+import { useRef } from 'react'
 import Image from 'next/image'
 import { motion, useScroll, useTransform, useMotionValueEvent, useReducedMotion } from 'framer-motion'
 import { CONTENT } from '@/lib/constants'
@@ -89,14 +89,6 @@ export function PainSection() {
   const burnProgressRef = useRef<number>(0)
   const mobileRef      = useRef<HTMLDivElement>(null)
   const reduce = useReducedMotion()
-  const [isDesktop, setIsDesktop] = useState(false)
-  useEffect(() => {
-    const mq = window.matchMedia('(min-width: 768px)')
-    setIsDesktop(mq.matches)
-    const handler = (e: MediaQueryListEvent) => setIsDesktop(e.matches)
-    mq.addEventListener('change', handler)
-    return () => mq.removeEventListener('change', handler)
-  }, [])
 
   const { scrollYProgress } = useScroll({
     target: desktopRef,
@@ -179,8 +171,8 @@ export function PainSection() {
               style={{ objectFit: 'cover' }} loading="lazy" />
           </div>
 
-          {/* Layer 2: WebGL canvas (desktop only — never mounts on mobile) */}
-          {isDesktop && !reduce && <PainBurnCanvas burnProgressRef={burnProgressRef} />}
+          {/* Layer 2: WebGL canvas (desktop only) */}
+          {!reduce && <PainBurnCanvas burnProgressRef={burnProgressRef} />}
           {reduce && (
             <div aria-hidden style={{ position: 'absolute', inset: 0, zIndex: 2 }}>
               <Image src="/pain-image.png" alt="" fill sizes="100vw"
