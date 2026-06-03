@@ -100,10 +100,6 @@ export function PainSection() {
     burnProgressRef.current = Math.min(1, Math.max(0, raw))
   })
 
-  const { scrollYProgress: mobileScroll } = useScroll({
-    target: mobileRef,
-    offset: ['start start', 'end end'],
-  })
 
   const { pain } = CONTENT
 

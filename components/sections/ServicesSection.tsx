@@ -73,7 +73,7 @@ function ServiceRow({
       }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      initial={{ opacity: 1, x: 24 }}
+      initial={{ opacity: 1, x: 0 }}
       whileInView={{ opacity: 1, x: 0 }}
       viewport={{ once: true, amount: 0.3 }}
       transition={{ duration: 0.55, delay: index * 0.06, ease: EASE }}
