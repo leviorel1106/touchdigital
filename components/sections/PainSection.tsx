@@ -1,7 +1,7 @@
 'use client'
 import { useRef } from 'react'
 import Image from 'next/image'
-import { motion, useScroll, useTransform, useMotionValueEvent, useReducedMotion } from 'framer-motion'
+import { motion, useScroll, useMotionValueEvent, useReducedMotion } from 'framer-motion'
 import { CONTENT } from '@/lib/constants'
 import { PainBurnCanvas } from './PainBurnCanvas'
 
@@ -100,11 +100,16 @@ export function PainSection() {
     burnProgressRef.current = Math.min(1, Math.max(0, raw))
   })
 
+  const mobileBurnRef = useRef<number>(0)
+
   const { scrollYProgress: mobileScroll } = useScroll({
     target: mobileRef,
     offset: ['start start', 'end end'],
   })
-  const mobileImageOpacity = useTransform(mobileScroll, [0.08, 0.92], [1, 0])
+  useMotionValueEvent(mobileScroll, 'change', (v) => {
+    const raw = (v - 0.08) / 0.84
+    mobileBurnRef.current = Math.min(1, Math.max(0, raw))
+  })
 
   const { pain } = CONTENT
 
@@ -132,15 +137,14 @@ export function PainSection() {
               style={{ objectFit: 'cover' }} loading="lazy" />
           </div>
 
-          {/* Layer 2: CSS opacity crossfade (no WebGL on mobile) */}
-          <motion.div
-            aria-hidden
-            style={{ position: 'absolute', inset: 0, zIndex: 2,
-              opacity: reduce ? 1 : mobileImageOpacity }}
-          >
-            <Image src="/pain-image.png" alt="" fill sizes="100vw"
-              style={{ objectFit: 'cover' }} loading="lazy" />
-          </motion.div>
+          {/* Layer 2: WebGL burn canvas (mobile, capped DPR+FPS) */}
+          {!reduce && <PainBurnCanvas burnProgressRef={mobileBurnRef} maxDpr={1.5} maxFps={30} />}
+          {reduce && (
+            <div aria-hidden style={{ position: 'absolute', inset: 0, zIndex: 2 }}>
+              <Image src="/pain-image.png" alt="" fill sizes="100vw"
+                style={{ objectFit: 'cover' }} loading="lazy" />
+            </div>
+          )}
 
           {/* Layer 3: gradient overlay */}
           <div className="absolute inset-0 pointer-events-none" style={OVERLAY_STYLE} />
