@@ -1,6 +1,6 @@
 'use client'
 import React, { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { SectionWrapper } from '@/components/ui/SectionWrapper'
 import { Layout, MessageCircle, Video, Search, Palette, Globe } from 'lucide-react'
 import { CONTENT } from '@/lib/constants'
@@ -64,7 +64,7 @@ function ServiceRow({
   const imgSrc = SERVICE_IMAGE[item.title]
 
   return (
-    <motion.div
+    <m.div
       style={{
         borderTop: '1px solid rgba(255,255,255,0.08)',
         position: 'relative',
@@ -81,7 +81,7 @@ function ServiceRow({
       {/* Floating icon card — appears above the row */}
       <AnimatePresence>
         {hovered && (
-          <motion.div
+          <m.div
             key="icon-card"
             initial={{ opacity: 0, y: 16, rotate: -5, scale: 0.82 }}
             animate={{ opacity: 1, y: 0,  rotate:  0, scale: 1   }}
@@ -118,7 +118,7 @@ function ServiceRow({
             ) : (
               <Icon size={44} color={accent} strokeWidth={1.2} />
             )}
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
 
@@ -128,7 +128,7 @@ function ServiceRow({
           const pos   = CHIP_POSITIONS[ci]
           const burst = CHIP_BURST[ci]
           return (
-            <motion.span
+            <m.span
               key={chip}
               initial={{ opacity: 0, scale: 0.5, x: burst.x, y: burst.y }}
               animate={{ opacity: 1, scale: 1,   x: 0,       y: 0       }}
@@ -154,7 +154,7 @@ function ServiceRow({
               }}
             >
               {chip}
-            </motion.span>
+            </m.span>
           )
         })}
       </AnimatePresence>
@@ -172,7 +172,7 @@ function ServiceRow({
       >
         {item.title}
       </h3>
-    </motion.div>
+    </m.div>
   )
 }
 
@@ -181,7 +181,7 @@ export function ServicesSection() {
 
   return (
     <SectionWrapper id="services" className="bg-bg-secondary">
-      <motion.div
+      <m.div
         initial={{ opacity: 1, y: 0 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.1 }}
@@ -199,7 +199,7 @@ export function ServicesSection() {
         >
           {services.headline}
         </h2>
-      </motion.div>
+      </m.div>
 
       {/* ── Desktop: large stacked names with hover reveal ── */}
       <div

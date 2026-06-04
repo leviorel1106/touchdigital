@@ -1,5 +1,5 @@
 'use client'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { MarqueeStrip } from '@/components/animations/MarqueeStrip'
 
 const EASE = [0.23, 1, 0.32, 1] as const
@@ -149,7 +149,7 @@ export function PostsSection() {
           pointerEvents: 'none',
         }}
       >
-        <motion.h2
+        <m.h2
           initial={{ opacity: 1, y: 0 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.1 }}
@@ -172,9 +172,9 @@ export function PostsSection() {
           >
             שגורם לעצור
           </span>
-        </motion.h2>
+        </m.h2>
 
-        <motion.p
+        <m.p
           initial={{ opacity: 1, y: 0 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.1 }}
@@ -186,9 +186,9 @@ export function PostsSection() {
           }}
         >
           פוסטים אורגניים ומודעות ממומנות שמביאים תוצאות — עיצוב שעוצר גלילה
-        </motion.p>
+        </m.p>
 
-        <motion.div
+        <m.div
           initial={{ opacity: 1, y: 0 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.1 }}
@@ -218,7 +218,7 @@ export function PostsSection() {
           >
             כל הפרויקטים →
           </a>
-        </motion.div>
+        </m.div>
       </div>
     </section>
   )

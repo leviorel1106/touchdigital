@@ -1,5 +1,5 @@
 ﻿'use client'
-import { motion, type Variants } from 'framer-motion'
+import { m, type Variants } from 'framer-motion'
 import { GodRays } from '@/components/animations/GodRays'
 
 const EASE = [0.23, 1, 0.32, 1] as [number, number, number, number]
@@ -95,7 +95,7 @@ export function GodRaysSection() {
         }}
       >
         {/* Eyebrow */}
-        <motion.span
+        <m.span
           style={EYEBROW_STYLE}
           variants={fadeUp}
           initial="hidden"
@@ -103,10 +103,10 @@ export function GodRaysSection() {
           viewport={{ once: true, amount: 0.1 }}
         >
           AI Powered Agency
-        </motion.span>
+        </m.span>
 
         {/* "Touch Digital" */}
-        <motion.span
+        <m.span
           style={TOUCH_DIGITAL_STYLE}
           variants={fadeUp}
           initial="hidden"
@@ -115,14 +115,14 @@ export function GodRaysSection() {
           transition={{ duration: 0.9, delay: 0.1, ease: EASE }}
         >
           Touch Digital
-        </motion.span>
+        </m.span>
 
         {/* "AI STUDIO" ג€” per-letter reveal */}
         <div
           style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', lineHeight: 1 }}
         >
           {AI_STUDIO_LETTERS.map((ch, i) => (
-            <motion.span
+            <m.span
               key={i}
               custom={i}
               variants={letterVariant}
@@ -135,12 +135,12 @@ export function GodRaysSection() {
               }}
             >
               {ch === ' ' ? 'ֲ ' : ch}
-            </motion.span>
+            </m.span>
           ))}
         </div>
 
         {/* Tagline */}
-        <motion.p
+        <m.p
           style={TAGLINE_STYLE}
           variants={fadeUp}
           initial="hidden"
@@ -149,10 +149,10 @@ export function GodRaysSection() {
           transition={{ duration: 0.9, delay: 0.9, ease: EASE }}
         >
           ׳׳ ׳—׳ ׳• ׳׳ ׳¨׳§ ׳¡׳•׳›׳ ׳•׳× ׳©׳™׳•׳•׳§׳™׳× ג€” ׳׳ ׳—׳ ׳• ׳¡׳˜׳•׳“׳™׳• ׳‘׳™׳ ׳” ׳׳׳׳›׳•׳×׳™׳× ׳©׳׳ ׳™׳¢ ׳×׳•׳¦׳׳•׳× ׳׳׳™׳×׳™׳•׳×
-        </motion.p>
+        </m.p>
 
         {/* Robot video card */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 40, scale: 0.96 }}
           whileInView={{ opacity: 1, y: 0, scale: 1 }}
           viewport={{ once: true, amount: 0.1 }}
@@ -176,7 +176,7 @@ export function GodRaysSection() {
             playsInline
             style={{ display: 'block', width: '100%', height: 'auto' }}
           />
-        </motion.div>
+        </m.div>
       </div>
     </section>
   )

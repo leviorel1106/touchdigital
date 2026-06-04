@@ -1,5 +1,5 @@
 'use client'
-import { motion, useReducedMotion } from 'framer-motion'
+import { m, useReducedMotion } from 'framer-motion'
 import { ReactNode } from 'react'
 
 const EASE = [0.23, 1, 0.32, 1] as const
@@ -21,7 +21,7 @@ const itemReduced = {
 
 export function StaggerContainer({ children, className = '' }: { children: ReactNode; className?: string }) {
   return (
-    <motion.div
+    <m.div
       className={className}
       variants={container}
       initial="hidden"
@@ -29,15 +29,15 @@ export function StaggerContainer({ children, className = '' }: { children: React
       viewport={{ once: true, margin: '-60px' }}
     >
       {children}
-    </motion.div>
+    </m.div>
   )
 }
 
 export function StaggerItem({ children, className = '' }: { children: ReactNode; className?: string }) {
   const reduce = useReducedMotion()
   return (
-    <motion.div className={className} variants={reduce ? itemReduced : itemVariants}>
+    <m.div className={className} variants={reduce ? itemReduced : itemVariants}>
       {children}
-    </motion.div>
+    </m.div>
   )
 }

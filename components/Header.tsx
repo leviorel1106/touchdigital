@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, m } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
 import { CONTENT } from '@/lib/constants'
 
@@ -108,7 +108,7 @@ export function Header() {
       {/* Mobile menu overlay */}
       <AnimatePresence>
         {open && (
-          <motion.div
+          <m.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -116,7 +116,7 @@ export function Header() {
             className="fixed inset-0 z-[80] bg-bg-primary/95 backdrop-blur-3xl flex flex-col items-center justify-center gap-10"
           >
             {CONTENT.nav.map((item, i) => (
-              <motion.a
+              <m.a
                 key={item.href}
                 href={item.href}
                 onClick={() => setOpen(false)}
@@ -126,9 +126,9 @@ export function Header() {
                 className="font-heebo font-black text-4xl text-white"
               >
                 {item.label}
-              </motion.a>
+              </m.a>
             ))}
-            <motion.a
+            <m.a
               href="/studio"
               onClick={() => setOpen(false)}
               initial={{ opacity: 0, y: 24 }}
@@ -137,8 +137,8 @@ export function Header() {
               className="font-heebo font-black text-4xl text-white"
             >
               פרויקטים
-            </motion.a>
-            <motion.a
+            </m.a>
+            <m.a
               href="#contact"
               onClick={() => setOpen(false)}
               initial={{ opacity: 0, y: 24 }}
@@ -147,8 +147,8 @@ export function Header() {
               className="mt-4 bg-white text-bg-primary font-heebo font-black text-xl px-10 py-4 rounded-full"
             >
               נדבר עכשיו ↗
-            </motion.a>
-          </motion.div>
+            </m.a>
+          </m.div>
         )}
       </AnimatePresence>
     </>

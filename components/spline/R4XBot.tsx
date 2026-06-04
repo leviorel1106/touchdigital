@@ -1,6 +1,6 @@
 'use client'
 import { useState, useCallback, useRef, useEffect } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, m } from 'framer-motion'
 import dynamic from 'next/dynamic'
 import type { Application } from '@splinetool/runtime'
 import { CONTENT } from '@/lib/constants'
@@ -45,7 +45,7 @@ export function R4XBot() {
       {/* Speech bubble */}
       <AnimatePresence>
         {quote && (
-          <motion.div
+          <m.div
             key={quote}
             initial={{ opacity: 0, y: 16, scale: 0.85 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -55,7 +55,7 @@ export function R4XBot() {
           >
             <p className="text-white text-sm font-rubik font-medium leading-relaxed">{quote}</p>
             <div className="absolute -bottom-2 right-10 w-4 h-4 bg-bg-secondary border-r border-b border-brand-purple/40 rotate-45" />
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
 
@@ -84,13 +84,13 @@ export function R4XBot() {
 
       {/* First-time hint */}
       {clickCount === 0 && loaded && (
-        <motion.div
+        <m.div
           animate={{ y: [0, -8, 0] }}
           transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
           className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-neon-pink/90 text-white px-4 py-2 rounded-full text-sm font-heebo font-bold shadow-glow-neon pointer-events-none whitespace-nowrap"
         >
           {CONTENT.robot.hint}
-        </motion.div>
+        </m.div>
       )}
     </div>
   )

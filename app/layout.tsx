@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Heebo, Rubik } from 'next/font/google'
 import './globals.css'
 import { TapBurst } from '@/components/animations/TapBurst'
+import { MotionProvider } from '@/components/MotionProvider'
 
 const heebo = Heebo({
   subsets: ['hebrew', 'latin'],
@@ -39,8 +40,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       className={`${heebo.variable} ${rubik.variable}`}
     >
       <body className="min-h-screen antialiased">
-        {children}
-        <TapBurst />
+        <MotionProvider>
+          {children}
+          <TapBurst />
+        </MotionProvider>
       </body>
     </html>
   )

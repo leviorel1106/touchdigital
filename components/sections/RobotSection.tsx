@@ -1,5 +1,5 @@
 ﻿'use client'
-import { motion, type Variants } from 'framer-motion'
+import { m, type Variants } from 'framer-motion'
 import { GodRays } from '@/components/animations/GodRays'
 
 const EASE = [0.23, 1, 0.32, 1] as [number, number, number, number]
@@ -46,7 +46,7 @@ export function RobotSection() {
         }}
       >
         {/* Eyebrow */}
-        <motion.span
+        <m.span
           variants={fadeUp}
           initial="hidden"
           whileInView="visible"
@@ -66,10 +66,10 @@ export function RobotSection() {
           }}
         >
           AI Powered Agency
-        </motion.span>
+        </m.span>
 
         {/* "Touch Digital" */}
-        <motion.span
+        <m.span
           variants={fadeUp}
           initial="hidden"
           whileInView="visible"
@@ -87,12 +87,12 @@ export function RobotSection() {
           }}
         >
           Touch Digital
-        </motion.span>
+        </m.span>
 
         {/* "AI STUDIO" ג€” per-letter reveal */}
         <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', lineHeight: 1, direction: 'ltr' }}>
           {AI_STUDIO_LETTERS.map((ch, i) => (
-            <motion.span
+            <m.span
               key={i}
               custom={i}
               variants={letterVariant}
@@ -114,7 +114,7 @@ export function RobotSection() {
               }}
             >
               {ch === ' ' ? ' ' : ch}
-            </motion.span>
+            </m.span>
           ))}
         </div>
       </div>

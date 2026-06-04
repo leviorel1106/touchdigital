@@ -1,6 +1,6 @@
 'use client'
 import { useRef } from 'react'
-import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion'
+import { m, useScroll, useTransform, useReducedMotion } from 'framer-motion'
 import { RotatingWord } from '@/components/animations/RotatingWord'
 import { CONTENT } from '@/lib/constants'
 
@@ -57,11 +57,11 @@ export function HeroSection() {
       </div>
 
       {/* Parallax content */}
-      <motion.div
+      <m.div
         style={{ y, opacity }}
         className="relative z-[3] text-center max-w-4xl mx-auto px-6 pt-28 pb-20"
       >
-        <motion.h1
+        <m.h1
           initial={{ opacity: 1, y: 0 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.0, delay: 0.08, ease: EASE }}
@@ -75,25 +75,25 @@ export function HeroSection() {
           {hero.headlinePrefix}{' '}
           <RotatingWord words={hero.rotatingWords} />{' '}
           {hero.headlineSuffix}
-        </motion.h1>
+        </m.h1>
 
-        <motion.p
+        <m.p
           initial={{ opacity: 1, y: 0 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, delay: 0.3, ease: EASE }}
           className="text-text-secondary text-xl leading-relaxed max-w-xl mx-auto mb-10 font-rubik font-medium"
         >
           {hero.sub}
-        </motion.p>
+        </m.p>
 
         {/* CTA with pulsing glow ring */}
-        <motion.div
+        <m.div
           initial={{ opacity: 1, y: 0 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, delay: 0.46, ease: EASE }}
           style={{ position: 'relative', display: 'inline-flex' }}
         >
-          <motion.span
+          <m.span
             aria-hidden
             animate={{ scale: [1, 1.18, 1], opacity: [0.55, 0.15, 0.55] }}
             transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut' }}
@@ -103,7 +103,7 @@ export function HeroSection() {
               filter: 'blur(10px)', zIndex: 0,
             }}
           />
-          <motion.a
+          <m.a
             href="#contact"
             whileHover={{ scale: 1.06 }}
             whileTap={{ scale: 0.96 }}
@@ -116,12 +116,12 @@ export function HeroSection() {
             }}
           >
             {hero.ctaPrimary}
-          </motion.a>
-        </motion.div>
-      </motion.div>
+          </m.a>
+        </m.div>
+      </m.div>
 
       {/* Scroll cue */}
-      <motion.div
+      <m.div
         animate={{ y: [0, 8, 0] }}
         transition={{ repeat: Infinity, duration: 2.4, ease: 'easeInOut' }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2 z-[3]"
@@ -130,7 +130,7 @@ export function HeroSection() {
         <div className="w-5 h-8 rounded-full border border-white/25 flex items-start justify-center pt-1.5">
           <div className="w-1 h-2 rounded-full bg-white/40" />
         </div>
-      </motion.div>
+      </m.div>
     </section>
   )
 }

@@ -1,5 +1,5 @@
 'use client'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { FadeInUp } from '@/components/animations/FadeInUp'
 
 const EASE = [0.23, 1, 0.32, 1] as const
@@ -16,7 +16,7 @@ const PROJECTS = [
 
 function BrowserMockup({ url, name, index }: { url: string; name: string; index: number }) {
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 1, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.1 }}
@@ -89,7 +89,7 @@ function BrowserMockup({ url, name, index }: { url: string; name: string; index:
           דף נחיתה
         </p>
       </div>
-    </motion.div>
+    </m.div>
   )
 }
 

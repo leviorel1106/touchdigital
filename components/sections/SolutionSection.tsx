@@ -1,6 +1,6 @@
 'use client'
 import { useRef, useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { Globe, Film, Sparkles, Bot, Image, Cog, MapPin } from 'lucide-react'
 import { FadeInUp } from '@/components/animations/FadeInUp'
 import { CONTENT } from '@/lib/constants'
@@ -110,7 +110,7 @@ export function SolutionSection() {
             const color = PILLAR_COLORS[i % PILLAR_COLORS.length]
 
             return (
-              <motion.div
+              <m.div
                 key={p.title}
                 initial={{ opacity: 1, y: 0 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -153,7 +153,7 @@ export function SolutionSection() {
                     {p.body}
                   </p>
                 </div>
-              </motion.div>
+              </m.div>
             )
           })}
         </div>

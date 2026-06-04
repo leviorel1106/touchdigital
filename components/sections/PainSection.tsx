@@ -1,7 +1,7 @@
 'use client'
 import { useRef } from 'react'
 import Image from 'next/image'
-import { motion, useScroll, useMotionValueEvent, useReducedMotion } from 'framer-motion'
+import { m, useScroll, useMotionValueEvent, useReducedMotion } from 'framer-motion'
 import { CONTENT } from '@/lib/constants'
 import { PainBurnCanvas } from './PainBurnCanvas'
 
@@ -13,7 +13,7 @@ function PainTextContent({ body }: { body: string }) {
       className="relative flex flex-col justify-center h-full px-6 md:px-16 lg:px-24"
       style={{ zIndex: 6, maxWidth: '680px', paddingTop: '80px', paddingBottom: '80px' }}
     >
-      <motion.h2
+      <m.h2
         initial={{ opacity: 1, y: 0 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.1 }}
@@ -28,7 +28,7 @@ function PainTextContent({ body }: { body: string }) {
         למה{' '}
         <span className="relative inline-block">
           <span className="text-neon-pink">לשרוף</span>
-          <motion.span
+          <m.span
             className="absolute bottom-0 right-0 left-0 h-[3px] rounded-full bg-neon-pink"
             initial={{ scaleX: 0 }}
             whileInView={{ scaleX: 1 }}
@@ -38,9 +38,9 @@ function PainTextContent({ body }: { body: string }) {
           />
         </span>{' '}
         כסף ממומן?
-      </motion.h2>
+      </m.h2>
 
-      <motion.p
+      <m.p
         initial={{ opacity: 1, y: 0 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.1 }}
@@ -48,7 +48,7 @@ function PainTextContent({ body }: { body: string }) {
         className="text-white/90 text-xl leading-relaxed font-rubik font-medium"
       >
         {body}
-      </motion.p>
+      </m.p>
     </div>
   )
 }

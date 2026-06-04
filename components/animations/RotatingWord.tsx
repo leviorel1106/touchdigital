@@ -1,6 +1,6 @@
 'use client'
 import { useRef, useEffect, useState } from 'react'
-import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
+import { m, AnimatePresence, useReducedMotion } from 'framer-motion'
 
 /* ── Gradient colour stops ─────────────────────────────────────── */
 // teal → sky-blue → purple → hot-pink
@@ -270,7 +270,7 @@ export function RotatingWord({ words, interval = 3500, className = '' }: Props) 
     return (
       <span className={`inline-block relative ${className}`} style={{ minWidth: '6ch' }} aria-live="polite">
         <AnimatePresence mode="wait">
-          <motion.span
+          <m.span
             key={fallback}
             initial={{ opacity: 1 }}
             animate={{ opacity: 1 }}
@@ -279,7 +279,7 @@ export function RotatingWord({ words, interval = 3500, className = '' }: Props) 
             style={{ ...GRADIENT_STYLE, display: 'inline-block' }}
           >
             {words[fallback]}
-          </motion.span>
+          </m.span>
         </AnimatePresence>
       </span>
     )

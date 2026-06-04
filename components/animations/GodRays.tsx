@@ -1,5 +1,5 @@
 'use client'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { useReducedMotion } from 'framer-motion'
 
 const CONIC = `conic-gradient(
@@ -37,7 +37,7 @@ export function GodRays() {
     <div style={{ position: 'absolute', inset: 0, overflow: 'hidden' }}>
 
       {/* Rotating conic gradient — the rays */}
-      <motion.div
+      <m.div
         style={{
           position: 'absolute',
           top: '-50%', left: '-50%', right: '-50%', bottom: '-50%',

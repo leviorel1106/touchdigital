@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
-import { motion, useReducedMotion } from 'framer-motion'
+import { m, useReducedMotion } from 'framer-motion'
 
 const EASE = [0.23, 1, 0.32, 1] as const
 
@@ -90,7 +90,7 @@ export function BeforeAfterSection() {
     >
       {/* Headline */}
       <div className="text-center px-6" style={{ marginBottom: 60 }}>
-        <motion.h2
+        <m.h2
           initial={{ opacity: 1, y: 0 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.1 }}
@@ -108,9 +108,9 @@ export function BeforeAfterSection() {
           >
             360°
           </span>
-        </motion.h2>
+        </m.h2>
 
-        <motion.p
+        <m.p
           initial={{ opacity: 1, y: 0 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.1 }}
@@ -118,7 +118,7 @@ export function BeforeAfterSection() {
           className="text-white/65 text-lg font-rubik font-medium max-w-md mx-auto"
         >
           כך נראים עסקים לפני ואחרי טאץ׳ דיגיטל
-        </motion.p>
+        </m.p>
       </div>
 
       {/* ── Mobile: 2-column static grid ──────────────── */}

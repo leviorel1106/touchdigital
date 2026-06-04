@@ -1,6 +1,6 @@
 'use client'
 import React, { useRef } from 'react'
-import { motion, useReducedMotion, useInView } from 'framer-motion'
+import { m, useReducedMotion, useInView } from 'framer-motion'
 import { SectionWrapper } from '@/components/ui/SectionWrapper'
 import { MarqueeStrip } from '@/components/animations/MarqueeStrip'
 import { CONTENT } from '@/lib/constants'
@@ -32,7 +32,7 @@ function Stars({ count }: { count: number }) {
 function TestimonialCard({ item }: { item: TestimonialItem }) {
   const initials = item.name.replace(/[\[\]]/g, '').trim().slice(0, 2) || 'ל׳'
   return (
-    <motion.li
+    <m.li
       dir="rtl"
       whileHover={{
         scale: 1.03,
@@ -59,7 +59,7 @@ function TestimonialCard({ item }: { item: TestimonialItem }) {
           </div>
         </footer>
       </blockquote>
-    </motion.li>
+    </m.li>
   )
 }
 
@@ -78,7 +78,7 @@ function TestimonialsColumn({
 
   return (
     <div ref={ref} className={`overflow-hidden ${className}`}>
-      <motion.ul
+      <m.ul
         animate={reduce || !inView ? {} : { translateY: '-50%' }}
         transition={{
           duration,
@@ -95,7 +95,7 @@ function TestimonialsColumn({
             ))}
           </React.Fragment>
         ))}
-      </motion.ul>
+      </m.ul>
     </div>
   )
 }
@@ -108,7 +108,7 @@ export function TestimonialsSection() {
 
   return (
     <SectionWrapper id="testimonials" style={{ background: '#ffffff' }}>
-      <motion.div
+      <m.div
         initial={{ opacity: 1, y: 0 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.1 }}
@@ -127,7 +127,7 @@ export function TestimonialsSection() {
         >
           {testimonials.headline}
         </h2>
-      </motion.div>
+      </m.div>
 
       {/* Scrolling columns */}
       <div

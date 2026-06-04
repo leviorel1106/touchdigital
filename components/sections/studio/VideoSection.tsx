@@ -1,6 +1,6 @@
 'use client'
 import { useRef } from 'react'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { FadeInUp } from '@/components/animations/FadeInUp'
 
 const EASE = [0.23, 1, 0.32, 1] as const
@@ -64,7 +64,7 @@ export function VideoSection({ title, sub, src, accent, id }: VideoSectionProps)
         </FadeInUp>
 
         {/* Video frame */}
-        <motion.div
+        <m.div
           initial={{ opacity: 1, y: 32 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.2 }}
@@ -86,7 +86,7 @@ export function VideoSection({ title, sub, src, accent, id }: VideoSectionProps)
             className="w-full block"
             style={{ maxHeight: '70vh', objectFit: 'contain' }}
           />
-        </motion.div>
+        </m.div>
       </div>
     </section>
   )

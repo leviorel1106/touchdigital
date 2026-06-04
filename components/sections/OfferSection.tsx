@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { CheckCircle2, Loader2, Check } from 'lucide-react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { SectionWrapper } from '@/components/ui/SectionWrapper'
 import { FadeInUp } from '@/components/animations/FadeInUp'
 import { CONTENT } from '@/lib/constants'
@@ -231,7 +231,7 @@ function ScratchCard({ pkg }: { pkg: Package }) {
   }, [pkg.id, revealed])
 
   return (
-    <motion.div
+    <m.div
       key={pkg.id}
       initial={{ opacity: 1, y: 0 }}
       animate={{ opacity: 1, y: 0 }}
@@ -240,7 +240,7 @@ function ScratchCard({ pkg }: { pkg: Package }) {
       style={{ position: 'relative', width: '100%', maxWidth: 520, margin: '0 auto' }}
     >
       {/* Animated glow border layer */}
-      <motion.div
+      <m.div
         initial={{ opacity: 0.45 }}
         whileInView={{ opacity: [0.45, 0.85, 0.45] }}
         viewport={{ once: false, amount: 0 }}
@@ -257,7 +257,7 @@ function ScratchCard({ pkg }: { pkg: Package }) {
         }}
       />
       {/* Second softer outer halo */}
-      <motion.div
+      <m.div
         initial={{ opacity: 0.2 }}
         whileInView={{ opacity: [0.2, 0.5, 0.2] }}
         viewport={{ once: false, amount: 0 }}
@@ -419,7 +419,7 @@ function ScratchCard({ pkg }: { pkg: Package }) {
 
         {/* Pulse ring hint (shows briefly before any scratch) */}
         {!revealed && !scratching && (
-          <motion.div
+          <m.div
             animate={{ scale: [1, 1.18, 1], opacity: [0.5, 0.15, 0.5] }}
             transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
             style={{
@@ -438,7 +438,7 @@ function ScratchCard({ pkg }: { pkg: Package }) {
         {/* Canvas scratch overlay */}
         <AnimatePresence>
           {!revealed && (
-            <motion.canvas
+            <m.canvas
               ref={canvasRef}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.4 }}
@@ -457,7 +457,7 @@ function ScratchCard({ pkg }: { pkg: Package }) {
         {/* Post-reveal CTA overlay */}
         <AnimatePresence>
           {revealed && (
-            <motion.a
+            <m.a
               href="#contact-form"
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -478,12 +478,12 @@ function ScratchCard({ pkg }: { pkg: Package }) {
               }}
             >
               אני רוצה את החבילה הזו ↗
-            </motion.a>
+            </m.a>
           )}
         </AnimatePresence>
       </div>
       </div>
-    </motion.div>
+    </m.div>
   )
 }
 
@@ -588,7 +588,7 @@ export function OfferSection() {
         </AnimatePresence>
 
         {/* Scarcity badge */}
-        <motion.div
+        <m.div
           initial={{ opacity: 1 }}
           animate={{ opacity: 1 }}
           className="flex justify-center mt-8"
@@ -616,7 +616,7 @@ export function OfferSection() {
             />
             {offer.badge}
           </span>
-        </motion.div>
+        </m.div>
       </SectionWrapper>
 
       {/* ── Part B: Contact form ── */}

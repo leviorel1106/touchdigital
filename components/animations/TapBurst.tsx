@@ -1,6 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
+import { AnimatePresence, m, useReducedMotion } from 'framer-motion'
 
 const ICONS = ['/icons/fp1.png', '/icons/fp2.png', '/icons/fp3.png', '/icons/fp4.png']
 
@@ -68,7 +68,7 @@ export function TapBurst() {
           const dx = Math.cos(rad) * p.distance
           const dy = Math.sin(rad) * p.distance
           return (
-            <motion.img
+            <m.img
               key={p.id}
               src={p.icon}
               alt=""

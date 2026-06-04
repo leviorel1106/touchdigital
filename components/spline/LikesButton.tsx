@@ -1,6 +1,6 @@
 'use client'
 import { useState, useCallback, useRef, useEffect } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, m } from 'framer-motion'
 import { X } from 'lucide-react'
 import { SPLINE_SCENES } from '@/lib/spline-config'
 import { getRandomVideo, getNextTriggerThreshold, type YoutubeVideo } from '@/lib/youtube-videos'
@@ -90,14 +90,14 @@ export function LikesButton() {
           {/* like counter */}
           <div className="inline-flex items-center gap-3 bg-bg-primary/80 backdrop-blur-xl border border-white/10 rounded-full px-6 py-3 mb-6">
             <span className="text-2xl">❤️</span>
-            <motion.span
+            <m.span
               key={clickCount}
               initial={{ scale: 1.4, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               className="text-white text-2xl font-heebo font-black tabular-nums"
             >
               {clickCount.toLocaleString('he-IL')}
-            </motion.span>
+            </m.span>
             <span className="text-text-muted text-sm">{CONTENT.easter.btnLabel}</span>
           </div>
 
@@ -134,14 +134,14 @@ export function LikesButton() {
       {/* YouTube lightbox */}
       <AnimatePresence>
         {video && (
-          <motion.div
+          <m.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setVideo(null)}
             className="fixed inset-0 z-[200] bg-black/90 backdrop-blur-md flex items-center justify-center p-4"
           >
-            <motion.div
+            <m.div
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
@@ -163,8 +163,8 @@ export function LikesButton() {
                 className="w-full h-full rounded-2xl border-0"
                 title={video.title}
               />
-            </motion.div>
-          </motion.div>
+            </m.div>
+          </m.div>
         )}
       </AnimatePresence>
     </section>

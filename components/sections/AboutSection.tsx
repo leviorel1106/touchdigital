@@ -1,6 +1,6 @@
 'use client'
 import { useRef } from 'react'
-import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion'
+import { m, useScroll, useTransform, useReducedMotion } from 'framer-motion'
 import { SectionWrapper } from '@/components/ui/SectionWrapper'
 import { FadeInUp } from '@/components/animations/FadeInUp'
 import { CountUp } from '@/components/animations/CountUp'
@@ -23,13 +23,13 @@ export function AboutSection() {
     <SectionWrapper id="about" className="overflow-hidden" style={{ background: '#ffffff' }}>
       <div ref={ref} className="relative">
         {/* Parallax watermark BG text */}
-        <motion.p
+        <m.p
           className="absolute inset-0 font-heebo font-black leading-none pointer-events-none select-none text-center"
           style={{ fontSize: 'clamp(32px, 7vw, 96px)', top: '-0.1em', letterSpacing: '-0.02em', x: watermarkX, color: 'rgba(0,0,0,0.04)' }}
           aria-hidden
         >
           {about.headlineBg}
-        </motion.p>
+        </m.p>
 
         <div className="relative grid lg:grid-cols-2 gap-16 items-center pt-6">
           <FadeInUp>

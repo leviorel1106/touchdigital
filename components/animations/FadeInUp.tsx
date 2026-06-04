@@ -1,5 +1,5 @@
 'use client'
-import { motion, useReducedMotion } from 'framer-motion'
+import { m, useReducedMotion } from 'framer-motion'
 import { ReactNode } from 'react'
 
 interface Props {
@@ -12,7 +12,7 @@ export function FadeInUp({ children, delay = 0, className = '' }: Props) {
   const reduce = useReducedMotion()
 
   return (
-    <motion.div
+    <m.div
       className={className}
       initial={{ opacity: 1, y: reduce ? 0 : 28 }}
       whileInView={{ opacity: 1, y: 0 }}
@@ -24,6 +24,6 @@ export function FadeInUp({ children, delay = 0, className = '' }: Props) {
       }}
     >
       {children}
-    </motion.div>
+    </m.div>
   )
 }

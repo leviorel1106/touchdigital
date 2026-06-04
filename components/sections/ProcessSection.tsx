@@ -1,6 +1,6 @@
 'use client'
 import { useRef, useState } from 'react'
-import { motion, useScroll, useTransform, useMotionValueEvent } from 'framer-motion'
+import { m, useScroll, useTransform, useMotionValueEvent } from 'framer-motion'
 import { Search, Compass, Palette, Rocket } from 'lucide-react'
 
 const EASE = [0.23, 1, 0.32, 1] as const
@@ -74,7 +74,7 @@ export function ProcessSection() {
         className="text-center max-w-3xl mx-auto px-6 mb-16 md:mb-24"
         style={{ position: 'relative', zIndex: 1 }}
       >
-        <motion.h2
+        <m.h2
           initial={{ opacity: 1, y: 0 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
@@ -88,8 +88,8 @@ export function ProcessSection() {
           }}
         >
           ארבעה שלבים למייקאובר דיגיטלי שמתחיל להכניס לידים
-        </motion.h2>
-        <motion.p
+        </m.h2>
+        <m.p
           initial={{ opacity: 1, y: 0 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
@@ -98,7 +98,7 @@ export function ProcessSection() {
           style={{ color: '#B7B7C8' }}
         >
           תהליך חד, מסודר וברור — מהאבחון הראשוני ועד תשתית דיגיטלית שנראית טוב, עובדת נכון ומניעה לקוחות לפעולה.
-        </motion.p>
+        </m.p>
       </div>
 
       {/* ── Desktop: horizontal timeline ─────────────────────── */}
@@ -124,7 +124,7 @@ export function ProcessSection() {
               borderRadius: 999,
             }} />
             {/* Purple progress */}
-            <motion.div style={{
+            <m.div style={{
               position: 'absolute', inset: 0,
               background: 'linear-gradient(to left, #8B5CF6 0%, #22D3EE 100%)',
               scaleX: lineProgress,
@@ -155,7 +155,7 @@ export function ProcessSection() {
                   }}
                 >
                   {/* Dot */}
-                  <motion.div
+                  <m.div
                     animate={{
                       background: isActive ? step.color : '#0a0b14',
                       borderColor: isActive ? step.color : 'rgba(255,255,255,0.2)',
@@ -174,7 +174,7 @@ export function ProcessSection() {
                   />
 
                   {/* Card — flex:1 stretches to match the tallest card in the row */}
-                  <motion.div
+                  <m.div
                     animate={{
                       borderColor: isActive ? `${step.color}55` : 'rgba(255,255,255,0.08)',
                       boxShadow: isActive
@@ -212,7 +212,7 @@ export function ProcessSection() {
                     </span>
 
                     {/* Premium icon badge */}
-                    <motion.div
+                    <m.div
                       animate={{
                         scale: isActive ? 1.08 : 1,
                         boxShadow: isActive
@@ -237,7 +237,7 @@ export function ProcessSection() {
                         pointerEvents: 'none',
                       }} />
                       <step.Icon size={26} color={step.color} strokeWidth={1.25} />
-                    </motion.div>
+                    </m.div>
 
                     <h3
                       className="font-heebo font-bold text-white mb-2"
@@ -251,7 +251,7 @@ export function ProcessSection() {
                     >
                       {step.body}
                     </p>
-                  </motion.div>
+                  </m.div>
                 </div>
               )
             })}
@@ -277,7 +277,7 @@ export function ProcessSection() {
           background: 'rgba(255,255,255,0.1)',
           zIndex: 0,
         }} />
-        <motion.div style={{
+        <m.div style={{
           position: 'absolute',
           right: 29, top: 10, bottom: 10,
           width: 2,
@@ -303,7 +303,7 @@ export function ProcessSection() {
               }}
             >
               {/* Dot — first in RTL flex row = rightmost */}
-              <motion.div
+              <m.div
                 animate={{
                   background: isActive ? step.color : '#05060A',
                   borderColor: isActive ? step.color : 'rgba(255,255,255,0.2)',
@@ -322,7 +322,7 @@ export function ProcessSection() {
               />
 
               {/* Card */}
-              <motion.div
+              <m.div
                 animate={{
                   borderColor: isActive ? `${step.color}50` : 'rgba(255,255,255,0.08)',
                   boxShadow: isActive ? `0 0 26px ${step.color}18` : 'none',
@@ -354,7 +354,7 @@ export function ProcessSection() {
                 </span>
 
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>
-                  <motion.div
+                  <m.div
                     animate={{ scale: isActive ? 1.08 : 1 }}
                     transition={{ duration: 0.3 }}
                     style={{
@@ -372,7 +372,7 @@ export function ProcessSection() {
                       borderRadius: '14px 14px 0 0', pointerEvents: 'none',
                     }} />
                     <step.Icon size={20} color={step.color} strokeWidth={1.3} />
-                  </motion.div>
+                  </m.div>
                   <h3
                     className="font-heebo font-bold text-white"
                     style={{ fontSize: 14, lineHeight: 1.3 }}
@@ -386,7 +386,7 @@ export function ProcessSection() {
                 >
                   {step.body}
                 </p>
-              </motion.div>
+              </m.div>
             </div>
           )
         })}

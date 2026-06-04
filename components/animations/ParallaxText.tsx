@@ -1,6 +1,6 @@
 'use client'
 import { useRef, ReactNode } from 'react'
-import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion'
+import { m, useScroll, useTransform, useReducedMotion } from 'framer-motion'
 
 interface Props {
   children: ReactNode
@@ -21,9 +21,9 @@ export function ParallaxText({ children, speed = 60, className = '' }: Props) {
 
   return (
     <div ref={ref} className={className}>
-      <motion.div style={{ y }}>
+      <m.div style={{ y }}>
         {children}
-      </motion.div>
+      </m.div>
     </div>
   )
 }
