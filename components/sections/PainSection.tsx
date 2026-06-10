@@ -106,18 +106,17 @@ export function PainSection() {
   return (
     <section id="pain" style={{ position: 'relative' }}>
 
-      {/* ── Mobile: scroll-driven crossfade, no WebGL, no fixed panel ── */}
+      {/* ── Mobile: single full-screen panel, normal scroll ── */}
       <div
         ref={mobileRef}
         className="mob-only"
-        style={{ height: reduce ? 'auto' : '250dvh', position: 'relative' }}
+        style={{ position: 'relative' }}
       >
         <div
           style={{
-            position: reduce ? 'relative' : 'sticky',
-            top: 0,
-            height: reduce ? 'auto' : '100dvh',
-            minHeight: reduce ? 600 : undefined,
+            position: 'relative',
+            height: '100dvh',
+            minHeight: 600,
             overflow: 'hidden',
           }}
         >
