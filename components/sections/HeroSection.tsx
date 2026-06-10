@@ -1,5 +1,5 @@
 'use client'
-import { useRef, useEffect } from 'react'
+import { useRef } from 'react'
 import { m, useScroll, useTransform, useReducedMotion } from 'framer-motion'
 import { RotatingWord } from '@/components/animations/RotatingWord'
 import { CONTENT } from '@/lib/constants'
@@ -14,20 +14,6 @@ export function HeroSection() {
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] })
   const y       = useTransform(scrollYProgress, [0, 1], reduce ? [0, 0] : [0, -130])
   const opacity = useTransform(scrollYProgress, [0, 0.75], [1, 0])
-
-  useEffect(() => {
-    // Pre-warm all section chunks while user reads the hero.
-    // Each section is ~5-10KB — they all download in ~100ms on 4G.
-    // By the time React reaches BelowFoldSections the chunks are cached → zero Suspense wait.
-    void import('@/components/sections/PainSection')
-    void import('@/components/sections/BeforeAfterSection')
-    void import('@/components/sections/PostsSection')
-    void import('@/components/sections/AboutSection')
-    void import('@/components/sections/ServicesSection')
-    void import('@/components/sections/TestimonialsSection')
-    void import('@/components/sections/ProcessSection')
-    void import('@/components/sections/OfferSection')
-  }, [])
 
   return (
     <section ref={ref} className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden" style={{ background: 'var(--bg-primary)' }}>
