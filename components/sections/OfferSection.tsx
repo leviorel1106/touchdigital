@@ -1,8 +1,6 @@
 'use client'
 import { useRef, useEffect, useState, useCallback } from 'react'
 import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
 import { CheckCircle2, Loader2, Check } from 'lucide-react'
 import { m, AnimatePresence } from 'framer-motion'
 import { SectionWrapper } from '@/components/ui/SectionWrapper'
@@ -13,13 +11,12 @@ const EASE = [0.23, 1, 0.32, 1] as const
 
 type Package = (typeof CONTENT.packages)[number]
 
-const schema = z.object({
-  fullName:     z.string().min(2, 'שם חייב להכיל לפחות 2 תווים'),
-  phone:        z.string().regex(/^0(5[0-9]|[2-489])\d{7,8}$/, 'מספר טלפון לא תקין'),
-  email:        z.string().email('אימייל לא תקין'),
-  businessType: z.string().min(1, 'בחר סוג עסק'),
-})
-type FormData = z.infer<typeof schema>
+type FormData = {
+  fullName: string
+  phone: string
+  email: string
+  businessType: string
+}
 
 const BUSINESS_TYPES = [
   "אימון אישי / קואצ'ינג", 'עריכת דין', 'נדל"ן',
@@ -495,9 +492,7 @@ export function OfferSection() {
   const [activeIdx, setActiveIdx] = useState(1) // default: Gold
   const [status, setStatus]       = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
 
-  const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
-    resolver: zodResolver(schema),
-  })
+  const { register, handleSubmit, formState: { errors } } = useForm<FormData>()
 
   const onSubmit = async (data: FormData) => {
     setStatus('loading')
@@ -646,19 +641,19 @@ export function OfferSection() {
             ) : (
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                 <div>
-                  <input {...register('fullName')} placeholder="שם מלא" className={inputCls(errors.fullName)} />
+                  <input {...register('fullName', { required: 'שם חייב להכיל לפחות 2 תווים', minLength: { value: 2, message: 'שם חייב להכיל לפחות 2 תווים' } })} placeholder="שם מלא" className={inputCls(errors.fullName)} />
                   {errors.fullName && <p className="text-red-400 text-xs mt-1 font-rubik">{errors.fullName.message}</p>}
                 </div>
                 <div>
-                  <input {...register('phone')} placeholder="טלפון" type="tel" className={inputCls(errors.phone)} />
+                  <input {...register('phone', { required: 'מספר טלפון לא תקין', pattern: { value: /^0(5[0-9]|[2-489])\d{7,8}$/, message: 'מספר טלפון לא תקין' } })} placeholder="טלפון" type="tel" className={inputCls(errors.phone)} />
                   {errors.phone && <p className="text-red-400 text-xs mt-1 font-rubik">{errors.phone.message}</p>}
                 </div>
                 <div>
-                  <input {...register('email')} placeholder="אימייל" type="email" className={inputCls(errors.email)} />
+                  <input {...register('email', { required: 'אימייל לא תקין', pattern: { value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, message: 'אימייל לא תקין' } })} placeholder="אימייל" type="email" className={inputCls(errors.email)} />
                   {errors.email && <p className="text-red-400 text-xs mt-1 font-rubik">{errors.email.message}</p>}
                 </div>
                 <div>
-                  <select {...register('businessType')} className={inputCls(errors.businessType)}>
+                  <select {...register('businessType', { required: 'בחר סוג עסק' })} className={inputCls(errors.businessType)}>
                     <option value="">סוג העסק / תחום</option>
                     {BUSINESS_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
                   </select>
