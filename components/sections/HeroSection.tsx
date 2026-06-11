@@ -20,6 +20,7 @@ export function HeroSection() {
       {/* Video background */}
       <video
         src="/hero-video.mp4"
+        poster="/hero-poster.jpg"
         autoPlay muted loop playsInline
         preload="metadata"
         style={{
