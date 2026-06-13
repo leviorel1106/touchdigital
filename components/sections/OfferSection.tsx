@@ -236,35 +236,37 @@ function ScratchCard({ pkg }: { pkg: Package }) {
       transition={{ duration: 0.38, ease: EASE }}
       style={{ position: 'relative', width: '100%', maxWidth: 520, margin: '0 auto' }}
     >
-      {/* Animated glow border layer */}
+      {/* Animated glow border layer — static on mobile (animating blur = scroll jank) */}
       <m.div
-        initial={{ opacity: 0.45 }}
-        whileInView={{ opacity: [0.45, 0.85, 0.45] }}
-        viewport={{ once: false, amount: 0 }}
-        transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
         aria-hidden
+        initial={isMobile ? undefined : { opacity: 0.45 }}
+        whileInView={isMobile ? undefined : { opacity: [0.45, 0.85, 0.45] }}
+        viewport={isMobile ? undefined : { once: false, amount: 0 }}
+        transition={isMobile ? undefined : { duration: 3, repeat: Infinity, ease: 'easeInOut' }}
         style={{
           position: 'absolute',
           inset: -2,
           borderRadius: 27,
           background: `linear-gradient(135deg, ${pkg.accent}, transparent 42%, transparent 58%, ${pkg.accent})`,
           filter: 'blur(10px)',
+          opacity: isMobile ? 0.6 : undefined,
           zIndex: 0,
           pointerEvents: 'none',
         }}
       />
-      {/* Second softer outer halo */}
+      {/* Second softer outer halo — static on mobile */}
       <m.div
-        initial={{ opacity: 0.2 }}
-        whileInView={{ opacity: [0.2, 0.5, 0.2] }}
-        viewport={{ once: false, amount: 0 }}
-        transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut', delay: 0.4 }}
         aria-hidden
+        initial={isMobile ? undefined : { opacity: 0.2 }}
+        whileInView={isMobile ? undefined : { opacity: [0.2, 0.5, 0.2] }}
+        viewport={isMobile ? undefined : { once: false, amount: 0 }}
+        transition={isMobile ? undefined : { duration: 3, repeat: Infinity, ease: 'easeInOut', delay: 0.4 }}
         style={{
           position: 'absolute',
           inset: -10,
           borderRadius: 34,
           background: `radial-gradient(ellipse at 50% 50%, ${pkg.accent}40 0%, transparent 70%)`,
+          opacity: isMobile ? 0.35 : undefined,
           zIndex: 0,
           pointerEvents: 'none',
         }}

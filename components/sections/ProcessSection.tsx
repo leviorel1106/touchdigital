@@ -48,7 +48,8 @@ export function ProcessSection() {
   const lineProgress = useTransform(scrollYProgress, [0, 1], [0, 1])
 
   useMotionValueEvent(scrollYProgress, 'change', (v) => {
-    setActiveStep(Math.min(STEPS.length - 1, Math.floor(v * STEPS.length)))
+    const next = Math.min(STEPS.length - 1, Math.floor(v * STEPS.length))
+    setActiveStep((prev) => (prev === next ? prev : next))
   })
 
   return (
@@ -285,6 +286,7 @@ export function ProcessSection() {
           transformOrigin: 'top center',
           background: 'linear-gradient(to bottom, #8B5CF6, #22D3EE)',
           boxShadow: '0 0 12px rgba(139,92,246,0.8)',
+          willChange: 'transform',
           zIndex: 0,
         }} />
 

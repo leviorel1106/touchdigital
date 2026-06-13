@@ -211,8 +211,11 @@ export function PainBurnCanvas({ burnProgressRef, maxDpr, maxFps }: Props) {
     const frameInterval = maxFps ? 1000 / maxFps : 0
 
     function render() {
+      // Fully stop the loop when off-screen — frees the compositor on mobile.
+      // The IntersectionObserver restarts it when the canvas re-enters view.
+      if (!visible) { raf = 0; return }
       raf = requestAnimationFrame(render)
-      if (!prog || !visible) return
+      if (!prog) return
 
       const now = performance.now()
       if (frameInterval > 0 && now - lastDraw < frameInterval) return
@@ -241,6 +244,9 @@ export function PainBurnCanvas({ burnProgressRef, maxDpr, maxFps }: Props) {
 
     io = new IntersectionObserver(([entry]) => {
       visible = entry.isIntersecting
+
+      // Restart the render loop when the canvas comes back into view
+      if (visible && raf === 0) raf = requestAnimationFrame(render)
 
       if (entry.isIntersecting && !started) {
         started = true

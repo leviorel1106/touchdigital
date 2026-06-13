@@ -87,6 +87,7 @@ function TestimonialsColumn({
           repeatType: 'loop',
         }}
         className="flex flex-col gap-5 pb-5 m-0 p-0"
+        style={{ willChange: 'transform', backfaceVisibility: 'hidden', transform: 'translateZ(0)' }}
       >
         {[0, 1].map(pass => (
           <React.Fragment key={pass}>
