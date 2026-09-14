@@ -117,7 +117,8 @@ export function Portfolio({
                 <div className="project-caption">
                   <div>
                     <span>
-                      {p.client} / {p.category}
+                      {p.commissioned ? `הופק עבור ${p.client}` : p.client} /{" "}
+                      {p.category}
                     </span>
                     <h3>{p.title}</h3>
                     {p.description && <p className="project-description">{p.description}</p>}

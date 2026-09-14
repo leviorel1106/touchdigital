@@ -8,6 +8,9 @@ export interface Project {
   client: string;
   description?: string;
   category: string;
+  // True only where the client actually commissioned the piece, so the
+  // "produced for" credit is never claimed for a concept or a spec film.
+  commissioned?: boolean;
   poster: string;
   aspect: "landscape" | "portrait";
   source: VideoSource;
@@ -28,6 +31,7 @@ export const projects: Project[] = [{
   id: "third-age-animation",
   title: "טכנולוגיה פוגשת את הגיל השלישי",
   client: "ועידת טכנולוגיה לגיל השלישי",
+  commissioned: true,
   description: "סרטון אנימציה שנוצר לוועידת טכנולוגיה לגיל השלישי, ומפגיש בין חדשנות לבין האנשים שהיא נועדה לשרת.",
   category: "אנימציית AI",
   poster: "/portfolio/animation/seniors-poster.jpg",
@@ -37,6 +41,7 @@ export const projects: Project[] = [{
   id: "children-animation",
   title: "שלא יישאר ילד בלי כריך",
   client: "עמותת אנשים",
+  commissioned: true,
   description: "סרטון אנימציה לעמותת אנשים, המספקת כריכים לילדים ממשפחות מעוטות יכולת שמגיעים לבית הספר ללא ארוחה. סיפור על צורך בסיסי שאף ילד לא צריך להישאר בלעדיו.",
   category: "אנימציית AI",
   poster: "/portfolio/animation/children-poster.jpg",
@@ -55,6 +60,7 @@ export const projects: Project[] = [{
   id: "business-systems",
   title: "אפקט טק. הטכנולוגיה שמאחורי העסק",
   client: "אפקט טק",
+  commissioned: true,
   description: "סרטון שיווקי לאפקט טק, שמעמיד במרכז את המערכות הטכנולוגיות שמלוות את הפעילות העסקית.",
   category: "סרטוני AI לעסקים",
   poster: "/portfolio/business/systems-poster.jpg",

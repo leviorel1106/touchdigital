@@ -501,6 +501,15 @@ export function Landing({ mailReady }: { mailReady: boolean }) {
           <span>
             © {new Date().getFullYear()} אוראל לוי. כל הזכויות שמורות.
           </span>
+          <span className="partner-badge">
+            בשיתוף פעולה עם
+            <Image
+              src="/brand/efect-member.png"
+              alt="efect member"
+              width={1726}
+              height={419}
+            />
+          </span>
           <span dir="ltr">MADE OF IDEAS.</span>
         </div>
       </footer>

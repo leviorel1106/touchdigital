@@ -1036,6 +1036,20 @@ main:focus {
   align-items: center;
   justify-content: space-between;
   gap: 22px;
+  flex-wrap: wrap;
+}
+/* The partner mark already carries its own white pill and pink border, with
+   transparent corners, so it is only sized here. */
+.partner-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--muted);
+  font-size: 13px;
+}
+.partner-badge img {
+  height: 34px;
+  width: auto;
 }
 .footer-top > p {
   font-size: 17px;
