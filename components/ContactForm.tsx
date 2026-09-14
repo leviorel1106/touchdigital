@@ -1,6 +1,6 @@
 "use client";
 import { useRef, useState, type FormEvent } from "react";
-import { ArrowUpLeft, Check, LoaderCircle, MessageCircle } from "lucide-react";
+import { ArrowUpLeft, Check, LoaderCircle } from "lucide-react";
 import Link from "next/link";
 
 export function ContactForm({
@@ -77,21 +77,11 @@ export function ContactForm({
           <br />
           משם נחשוב יחד איך להביא את זה למסך.
         </p>
-        {whatsapp ? (
-          <a
-            className="whatsapp-button"
-            href={whatsapp}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <MessageCircle size={21} /> לדבר איתי בוואטסאפ
-          </a>
-        ) : (
-          preview && (
-            <p className="setup-note">
-              כפתור הוואטסאפ יחובר כשיתווסף המספר שלך.
-            </p>
-          )
+        {/* WhatsApp lives in the floating button, not here. */}
+        {!whatsapp && preview && (
+          <p className="setup-note">
+            כפתור הוואטסאפ יחובר כשיתווסף המספר שלך.
+          </p>
         )}
       </div>
       <div className="form-panel reveal">

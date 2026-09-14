@@ -25,9 +25,10 @@ export const metadata: Metadata = {
     locale: "he_IL",
     type: "website",
     siteName: "Orel Levi",
+    images: [{ url: "/brand/logo-primary.png", width: 438, height: 418, alt: "אוראל לוי, יוצר תוכן AI" }],
   },
   robots: { index: site.ready, follow: site.ready },
-  icons: { icon: "/icon.svg" },
+  icons: { icon: "/brand/icon.png", apple: "/brand/icon.png" },
 };
 export default function RootLayout({
   children,

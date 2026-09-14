@@ -210,14 +210,11 @@ main:focus {
   justify-content: space-between;
   gap: 24px;
 }
+/* The supplied lockup, sized by height so the header controls the scale. */
 .wordmark {
-  display: flex;
-  align-items: center;
-  gap: 11px;
-  font:
-    700 21px/1 Arial,
-    sans-serif;
-  letter-spacing: -0.7px;
+  height: 42px;
+  width: auto;
+  display: block;
 }
 .wordmark-sub {
   display: block;
@@ -1370,16 +1367,7 @@ main:focus {
     gap: 14px;
   }
   .wordmark {
-    font-size: 17px;
-    gap: 8px;
-  }
-  .wordmark-sub {
-    font-size: 6px;
-    letter-spacing: 1.5px;
-  }
-  .brand-symbol {
-    width: 31px;
-    height: 31px;
+    height: 32px;
   }
   .header-contact {
     font-size: 12px;
@@ -1645,26 +1633,15 @@ main:focus {
   }
 }
 
-/* A solid WhatsApp call to action next to the form, for people who would
-   rather open a chat than fill anything in. */
-.whatsapp-button {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  margin-top: 28px;
-  padding: 15px 28px;
-  border-radius: 999px;
-  font-size: 16px;
-  font-weight: 600;
+/* The floating button is the site's one WhatsApp entry point, so it carries
+   WhatsApp's own green rather than the site palette. */
+.whatsapp-float {
+  background: oklch(0.63 0.17 152);
   color: oklch(0.99 0 0);
-  background: oklch(0.6 0.16 152);
-  transition:
-    background 0.25s var(--ease),
-    transform 0.25s var(--ease);
+  box-shadow: 0 10px 30px oklch(0.63 0.17 152 / 0.35);
 }
-.whatsapp-button:hover {
-  background: oklch(0.67 0.175 152);
-  transform: translateY(-2px);
+.whatsapp-float:hover {
+  background: oklch(0.69 0.18 152);
 }
 
 /* A neon ring that keeps travelling clockwise around the form. The angle has
@@ -1721,9 +1698,3 @@ main:focus {
   }
 }
 
-@media (max-width: 560px) {
-  .whatsapp-button {
-    width: 100%;
-    justify-content: center;
-  }
-}
