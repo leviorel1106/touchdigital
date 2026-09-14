@@ -109,6 +109,8 @@ p { text-wrap: pretty; }
 .manifesto-signature { color: var(--ink); }
 .about.section { gap: clamp(40px, 7vw, 120px); padding-block: 130px; perspective: 1200px; }
 .about-art { background: oklch(.26 .15 264); aspect-ratio: 1/1.12; border-radius: 4px; isolation: isolate; }
+/* Anchor the crop near the top of the frame so the face is never cut. */
+.about-art img { object-position: center 20%; }
 .about-art::before { content: ""; position: absolute; inset: 0; background: linear-gradient(145deg, oklch(.53 .24 264), transparent 70%); z-index: -1; }
 .about-art::after { content: ""; position: absolute; inset: 12%; border: 1px solid oklch(1 0 0 / .3); transform: rotate(-12deg); z-index: -1; }
 .about-monogram { color: var(--studio-paper); font-weight: 700; transform: none; }
@@ -226,7 +228,8 @@ p { text-wrap: pretty; }
   .manifesto > p { font-size: 34px; }
   .manifesto-signature { font-size: 8px; }
   .about.section { padding-block: 65px; gap: 38px; }
-  .about-art { aspect-ratio: 1.12/1; }
+  /* A landscape frame cut straight through the portrait on phones. */
+  .about-art { aspect-ratio: 1/1.1; }
   .about-signature { font-size: 27px; }
   .process.section { padding-bottom: 65px; }
   .process-steps { grid-template-columns: 1fr; }
