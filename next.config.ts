@@ -1,8 +1,13 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  devIndicators: false,
   images: {
-    formats: ['image/avif', 'image/webp'],
+    remotePatterns: [
+      { protocol: "https", hostname: "images.unsplash.com" },
+      { protocol: "https", hostname: "i.ytimg.com" },
+    ],
+    formats: ["image/avif", "image/webp"],
     deviceSizes: [390, 768, 1280, 1920],
     minimumCacheTTL: 31536000,
   },

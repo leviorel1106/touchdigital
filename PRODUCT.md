@@ -1,33 +1,30 @@
-# Product
+# Orel Levi — AI content for businesses
 
 ## Register
-
 brand
 
 ## Users
-Israeli small and medium business owners — lawyers, coaches, real-estate agents, beauty salons, event companies — who spend on paid ads but lack the digital infrastructure to make them convert. They check their phones constantly, speak bluntly, and are skeptical of agencies after being burned before.
+Hebrew-speaking business owners exploring a creator for brand films, advertising and social video. The work must be easy to view on a phone and lead naturally into a conversation.
 
 ## Product Purpose
-Touch Digital builds the complete digital infrastructure (landing page, WhatsApp chatbot, social makeover, video content, Google Business, branding) so business owners can run paid ads that actually close. Success: a business owner seeing 10 qualified leads per day instead of burned ad spend.
+A personal portfolio and landing page for Orel Levi, focused exclusively on AI content creation. Success is a visitor understanding the creative offer, watching relevant work and submitting a real inquiry by email or WhatsApp.
 
 ## Brand Personality
-Bold, direct, results-proven. "נועז, ישיר, מוכיח." Emotional goal: replace anxiety about wasted ad spend with confidence in a system that works.
+Cinematic, imaginative, personal. Confident visual storytelling, human creative direction, clear Hebrew copy.
 
 ## Anti-references
-- Generic SaaS glass-card dark templates
-- Cold, academic, tech-startup aesthetic
-- Agencies that promise "transformation" without showing specific proof
-- Loud neon decoration without payoff
+Generic software dashboards, decorative robots, neon technology clichés, service bundles unrelated to content creation, invented client results or testimonials.
 
 ## Design Principles
-1. The offer is the hero — every section earns trust toward the contact form
-2. Numbers over adjectives — specific beats vague
-3. Confidence through space — bold typography and breathing room, not decorative noise
-4. Match the client's energy — Israeli business owners are direct; the design mirrors that
-5. Show, don't claim — demonstrate professionalism through execution quality
+1. Real work carries the proof; never label stock or examples as client projects.
+2. Give imagery room, with readable typography and deliberate pacing.
+3. Keep scroll and touch behavior native; motion supports the story.
+4. Make contacting Orel direct, honest and reliable.
+5. Keep hero media replaceable while retaining the surrounding composition.
 
 ## Accessibility & Inclusion
-- RTL Hebrew throughout
-- WCAG AA contrast on all body text
-- prefers-reduced-motion respected
-- Touch targets 44px minimum
+Hebrew RTL, AA text contrast target, visible keyboard focus, native modal focus containment, reduced-motion alternative, responsive touch controls.
+
+## Approved content boundaries
+The 29-second 720p concept showreel is approved and embedded. Real client projects, personal biography, portrait, WhatsApp number, destination email and real domain are pending from the owner. Preview is noindex. No public release until these are reviewed and configured.
+

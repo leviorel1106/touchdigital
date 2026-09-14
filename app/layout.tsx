@@ -1,50 +1,47 @@
-import type { Metadata } from 'next'
-import { Heebo, Rubik } from 'next/font/google'
-import './globals.css'
-import { TapBurst } from '@/components/animations/TapBurst'
-import { MotionProvider } from '@/components/MotionProvider'
-
-const heebo = Heebo({
-  subsets: ['hebrew', 'latin'],
-  weight: ['400', '500', '700', '800', '900'],
-  variable: '--font-heebo',
-  display: 'swap',
-})
-
-const rubik = Rubik({
-  subsets: ['hebrew', 'latin'],
-  weight: ['400', '500', '600', '700'],
-  variable: '--font-rubik',
-  display: 'swap',
-})
-
+import type { Metadata } from "next";
+import localFont from "next/font/local";
+import { site } from "@/lib/site";
+import "./globals.css";
+import "./motion.css";
+import "./studio.css";
+import "./legal.css";
+import { PrivacyControls } from "@/components/PrivacyControls";
+const assistant = localFont({
+  src: [
+    { path: "./fonts/assistant-400.ttf", weight: "400" },
+    { path: "./fonts/assistant-500.ttf", weight: "500" },
+    { path: "./fonts/assistant-600.ttf", weight: "600" },
+    { path: "./fonts/assistant-700.ttf", weight: "700" },
+    { path: "./fonts/assistant-800.ttf", weight: "800" },
+  ],
+  variable: "--font-assistant",
+  display: "swap",
+});
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : undefined);
 export const metadata: Metadata = {
-  title: "טאץ' דיגיטל | תשתית דיגיטלית 360° לעסקים שרוצים לבלוט",
-  description: "בונים לעסק שלך תשתית דיגיטלית יוקרתית: דף נחיתה ממיר, צ'אטבוט וואטסאפ, מייקאובר סושיאל וכרטיס Google. חבילת טאץ' הזהב — 2,500 ₪ בלבד.",
-  keywords: ['שיווק דיגיטלי', 'דף נחיתה', "צ'אטבוט", 'מייקאובר סושיאל', "טאץ' דיגיטל"],
-  metadataBase: new URL('https://touchdigital.co.il'),
+  title: "אוראל לוי | יצירת תוכן AI לעסקים",
+  description: site.description,
+  ...(siteUrl
+    ? { metadataBase: new URL(siteUrl), alternates: { canonical: "/" } }
+    : {}),
   openGraph: {
-    title: "טאץ' דיגיטל — המנוע שמאחורי המותג שלך",
-    description: 'תשתית דיגיטלית 360° שגורמת ללקוח לבחור דווקא בך',
-    locale: 'he_IL',
-    type: 'website',
+    title: "אוראל לוי | העסק שלך. מעבר לדמיון.",
+    description: site.description,
+    locale: "he_IL",
+    type: "website",
+    siteName: "Orel Levi",
   },
-  robots: { index: true, follow: true },
-}
-
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+  robots: { index: site.ready, follow: site.ready },
+  icons: { icon: "/icon.svg" },
+};
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <html
-      lang="he"
-      dir="rtl"
-      className={`${heebo.variable} ${rubik.variable}`}
-    >
-      <body className="min-h-screen antialiased">
-        <MotionProvider>
-          {children}
-          <TapBurst />
-        </MotionProvider>
-      </body>
+    <html lang="he" dir="rtl" className={assistant.variable}>
+      <body>{children}<PrivacyControls /></body>
     </html>
-  )
+  );
 }
