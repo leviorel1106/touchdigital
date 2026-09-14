@@ -1,0 +1,30 @@
+# The CLI uploads from disk, not from git, so everything that must stay
+# off the public site is listed here explicitly.
+
+# The old site is kept for reference only and must never be published.
+public/legacy-review
+
+# Production source material and raw references, not part of the site.
+artifacts
+robot-references
+AI
+pic
+before after animation
+icons animation tapping
+posts animation
+
+# Planning and review notes.
+*.md
+!README.md
+CONTINUITY-EDITS.json
+COVERAGE-V4.json
+FULL-SEQUENCE-REVIEW.json
+MULTISHOT-V4.json
+PREMIUM-PILOT.json
+SELECTED-ASSETS.json
+SELECTION-V3.json
+
+# Local build and dependency output; Vercel rebuilds these.
+.next
+node_modules
+tsconfig.tsbuildinfo

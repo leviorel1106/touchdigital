@@ -159,3 +159,62 @@ test("rejects cross-origin, incorrect content type, invalid keys and oversized b
     413,
   );
 });
+
+const storeEnv = {
+  SUPABASE_URL: "https://project.supabase.co",
+  SUPABASE_ANON_KEY: "anon-key",
+};
+test("stores the lead in the database when no mail provider is configured", async () => {
+  let sent;
+  const key = crypto.randomUUID();
+  const handler = createLeadHandler({
+    env: storeEnv,
+    send: async (url, init) => {
+      sent = { url, ...init };
+      return new Response(null, { status: 201 });
+    },
+  });
+  const res = await handler(
+    request({ ...valid, phone: "+972 50-1234567" }, { key }),
+  );
+  assert.equal(res.status, 200);
+  assert.deepEqual(await res.json(), { ok: true });
+  assert.equal(sent.url, "https://project.supabase.co/rest/v1/site_leads");
+  const row = JSON.parse(sent.body);
+  assert.equal(row.request_id, key);
+  assert.equal(row.phone, "0501234567");
+  assert.equal(row.source, "orel-levi-site");
+  assert.equal(sent.headers.apikey, "anon-key");
+});
+test("a stored lead survives a mail provider failure", async () => {
+  for (const mail of [
+    async () => Response.json({}, { status: 429 }),
+    async () => Response.json({}),
+    async () => {
+      throw new Error("timeout");
+    },
+  ]) {
+    const handler = createLeadHandler({
+      env: { ...env, ...storeEnv },
+      send: async (url, init) =>
+        url.includes("supabase")
+          ? new Response(null, { status: 201 })
+          : mail(url, init),
+    });
+    assert.equal((await handler(request())).status, 200);
+  }
+});
+test("a repeated submission is accepted rather than duplicated", async () => {
+  const handler = createLeadHandler({
+    env: storeEnv,
+    send: async () => new Response(null, { status: 409 }),
+  });
+  assert.equal((await handler(request())).status, 200);
+});
+test("a lead that reaches neither database nor mail is reported as failed", async () => {
+  const handler = createLeadHandler({
+    env: storeEnv,
+    send: async () => new Response(null, { status: 500 }),
+  });
+  assert.equal((await handler(request())).status, 502);
+});

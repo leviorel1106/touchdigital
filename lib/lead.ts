@@ -24,6 +24,8 @@ type Environment = {
   LEAD_TO_EMAIL?: string;
   LEAD_FROM_EMAIL?: string;
   NEXT_PUBLIC_SITE_URL?: string;
+  SUPABASE_URL?: string;
+  SUPABASE_ANON_KEY?: string;
 };
 type Dependencies = {
   env: Environment;
@@ -39,6 +41,9 @@ const reply = (
     { ok: false, message },
     { status, headers: { "Cache-Control": "no-store", ...headers } },
   );
+
+const accepted = () =>
+  Response.json({ ok: true }, { headers: { "Cache-Control": "no-store" } });
 
 // Bounded, per-instance protection. Add platform/WAF rate limits when deploying at scale.
 export function createLeadHandler({
@@ -93,7 +98,12 @@ export function createLeadHandler({
         400,
         "בדקו שהשם ומספר הטלפון תקינים, ושהמייל הוקלד נכון אם הוספתם אותו.",
       );
-    if (!env.RESEND_API_KEY || !env.LEAD_TO_EMAIL || !env.LEAD_FROM_EMAIL)
+    // Two independent sinks: the database always keeps the lead, email only notifies.
+    const canStore = Boolean(env.SUPABASE_URL && env.SUPABASE_ANON_KEY);
+    const canEmail = Boolean(
+      env.RESEND_API_KEY && env.LEAD_TO_EMAIL && env.LEAD_FROM_EMAIL,
+    );
+    if (!canStore && !canEmail)
       return reply(
         503,
         "שליחת הפניות עדיין אינה פעילה. אפשר לפנות בוואטסאפ כשפרטי הקשר יהיו זמינים.",
@@ -117,6 +127,38 @@ export function createLeadHandler({
       count: (record?.count ?? 0) + 1,
       expires: record?.expires ?? stamp + 600000,
     });
+    // The database is the sink of record: a stored lead survives any mail failure.
+    let stored = false;
+    if (canStore) {
+      try {
+        const response = await send(`${env.SUPABASE_URL}/rest/v1/site_leads`, {
+          method: "POST",
+          headers: {
+            apikey: env.SUPABASE_ANON_KEY as string,
+            Authorization: `Bearer ${env.SUPABASE_ANON_KEY}`,
+            "Content-Type": "application/json",
+            Prefer: "return=minimal",
+          },
+          body: JSON.stringify({
+            request_id: key,
+            full_name: data.fullName,
+            phone: data.phone,
+            email: data.email || null,
+            message: data.message || null,
+            source: "orel-levi-site",
+          }),
+          signal: AbortSignal.timeout(10000),
+        });
+        // A duplicate request id means this exact submission was already captured.
+        stored = response.ok || response.status === 409;
+      } catch {
+        stored = false;
+      }
+    }
+    if (!canEmail)
+      return stored
+        ? accepted()
+        : reply(502, "השליחה מתעכבת. נסו שוב או פנו בוואטסאפ.");
     try {
       const response = await send("https://api.resend.com/emails", {
         method: "POST",
@@ -135,16 +177,19 @@ export function createLeadHandler({
         signal: AbortSignal.timeout(10000),
       });
       if (!response.ok)
-        return reply(502, "הפנייה לא נשלחה כרגע. נסו שוב או פנו בוואטסאפ.");
+        return stored
+          ? accepted()
+          : reply(502, "הפנייה לא נשלחה כרגע. נסו שוב או פנו בוואטסאפ.");
       const result = (await response.json()) as { id?: string };
       if (!result.id)
-        return reply(502, "לא התקבל אישור לשליחה. אפשר לנסות שוב.");
-      return Response.json(
-        { ok: true },
-        { headers: { "Cache-Control": "no-store" } },
-      );
+        return stored
+          ? accepted()
+          : reply(502, "לא התקבל אישור לשליחה. אפשר לנסות שוב.");
+      return accepted();
     } catch {
-      return reply(502, "השליחה מתעכבת. נסו שוב או פנו בוואטסאפ.");
+      return stored
+        ? accepted()
+        : reply(502, "השליחה מתעכבת. נסו שוב או פנו בוואטסאפ.");
     }
   };
 }
