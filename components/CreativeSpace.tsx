@@ -33,7 +33,7 @@ export function CreativeSpace({ active }: { active: number }) {
   }, []);
   return <div ref={ref} className={`creative-space ${enabled && ready ? "has-canvas" : ""}`} aria-hidden="true">
     <div className="space-fallback">
-      {["culinary", "villa", "fashion"].map((image, index) => <div className={`space-frame ${index === active ? "selected" : ""}`} key={image}><Image src={`/showreel/${image}.jpg`} alt="" fill sizes="(max-width: 900px) 85vw, 600px" /></div>)}
+      {["/portfolio/social/dragon-poster.jpg", "/portfolio/animation/children-poster.jpg", "/portfolio/street/poster.jpg"].map((image, index) => <div className={`space-frame ${index === active ? "selected" : ""}`} key={image}><Image src={image} alt="" fill sizes="(max-width: 900px) 46vw, 300px" /></div>)}
     </div>
     {enabled && <CanvasBoundary onError={onError}><FilmSpace active={active} onReady={onReady} /></CanvasBoundary>}
     <span className="space-caption">רעיון אחד. אינסוף נקודות מבט.</span>

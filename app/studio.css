@@ -77,8 +77,9 @@ p { text-wrap: pretty; }
 .film-space-canvas { position: absolute !important; inset: 0; z-index: 2; }
 .space-fallback { position: absolute; inset: 0; perspective: 1000px; transition: opacity .4s; }
 .has-canvas .space-fallback { opacity: 0; }
-.space-frame { position: absolute; inset: 22% 14%; transform: translate(8%, 8%) rotate(-8deg); overflow: hidden; border: 1px solid oklch(.6 .05 264); opacity: .35; transition: transform .8s var(--ease), opacity .6s; }
-.space-frame:nth-child(2) { transform: translate(-8%, -8%) rotate(8deg); }
+/* Upright, phone-shaped frames: the same proportions as the work they hold. */
+.space-frame { position: absolute; inset: 6% 32%; transform: translate(14%, 6%) rotate(-8deg); overflow: hidden; border: 1px solid oklch(.6 .05 264); border-radius: 6px; opacity: .35; transition: transform .8s var(--ease), opacity .6s; }
+.space-frame:nth-child(2) { transform: translate(-14%, -6%) rotate(8deg); }
 .space-frame.selected { transform: translate(0) rotateY(-8deg); z-index: 1; opacity: 1; }
 .space-frame img { object-fit: cover; }
 .space-caption { position: absolute; bottom: 9%; right: 0; left: 0; text-align: center; color: var(--muted); font-size: 13px; z-index: 3; pointer-events: none; }
@@ -91,7 +92,13 @@ p { text-wrap: pretty; }
 .services .muted { color: oklch(.5 .08 264); }
 .services .eyebrow { color: oklch(.43 .12 264); }
 .services .service-list { max-width: 1400px; margin-inline: auto; }
-.services .service-row { padding-block: 38px; grid-template-columns: 45px 1fr 1fr 48px; transition: padding .4s var(--ease), background .3s; }
+.services .service-row { padding-block: 38px; grid-template-columns: 120px 1fr 1fr 48px; transition: padding .4s var(--ease), background .3s; }
+/* Numerals as spray-can tags: heavy, tilted, outlined, one colour each. */
+.services .service-number { font-size: clamp(64px, 7vw, 104px); font-weight: 800; font-style: italic; line-height: .8; letter-spacing: -.05em; align-self: center; margin-top: 0; transform: rotate(-7deg); -webkit-text-stroke: 3px var(--studio-dark); paint-order: stroke fill; text-shadow: 5px 6px 0 oklch(.25 .03 264 / .2); transition: transform .35s var(--ease); }
+.services .service-row:nth-of-type(1) .service-number { color: oklch(.7 .16 233); }
+.services .service-row:nth-of-type(2) .service-number { color: oklch(.55 .25 300); }
+.services .service-row:nth-of-type(3) .service-number { color: oklch(.72 .14 188); }
+.services .service-row:hover .service-number { transform: rotate(-7deg) scale(1.08); }
 .services .service-detail { grid-column: 3; grid-row: 1; }
 .services .service-arrow { grid-column: 4; grid-row: 1; }
 .services .service-row::before, .services .service-row::after { display: none; }
@@ -109,8 +116,9 @@ p { text-wrap: pretty; }
 .manifesto-signature { color: var(--ink); }
 .about.section { gap: clamp(40px, 7vw, 120px); padding-block: 130px; perspective: 1200px; }
 .about-art { background: oklch(.26 .15 264); aspect-ratio: 1/1.12; border-radius: 4px; isolation: isolate; }
-/* Anchor the crop near the top of the frame so the face is never cut. */
-.about-art img { object-position: center 20%; }
+/* The source portrait leaves barely any room above the head, so whatever the
+   frame has to lose comes off the bottom, never the top. */
+.about-art img { object-position: center top; }
 .about-art::before { content: ""; position: absolute; inset: 0; background: linear-gradient(145deg, oklch(.53 .24 264), transparent 70%); z-index: -1; }
 .about-art::after { content: ""; position: absolute; inset: 12%; border: 1px solid oklch(1 0 0 / .3); transform: rotate(-12deg); z-index: -1; }
 .about-monogram { color: var(--studio-paper); font-weight: 700; transform: none; }
@@ -164,7 +172,7 @@ p { text-wrap: pretty; }
   .space-caption { bottom: 5%; }
   .creative-copy h2 { font-size: 58px; }
   .chapter-copy { min-height: 105px; }
-  .services .service-row { grid-template-columns: 30px 1fr 1fr; gap: 20px; }
+  .services .service-row { grid-template-columns: 86px 1fr 1fr; gap: 20px; }
   .services .service-arrow { display: none; }
   .process-steps { grid-template-columns: repeat(2, 1fr); }
   .process-steps li:nth-child(3) { border-inline-start: none; }
@@ -215,12 +223,13 @@ p { text-wrap: pretty; }
   .creative-copy h2 { font-size: 46px; }
   .creative-screen { height: 300px; }
   .creative-space { inset-inline: -15px; }
-  .space-frame { inset: 17% 9%; }
+  .space-frame { inset: 4% 26%; }
   .chapter-buttons button { padding: 14px 5px; font-size: 13px; }
   .services.section { padding-block: 65px; }
   .services .section-heading { display: block; }
   .services .section-intro { margin-top: 22px; }
-  .services .service-row { grid-template-columns: 28px 1fr; padding-block: 28px; }
+  .services .service-row { grid-template-columns: 74px 1fr; padding-block: 28px; }
+  .services .service-number { -webkit-text-stroke-width: 2px; text-shadow: 3px 4px 0 oklch(.25 .03 264 / .2); }
   .services .service-detail { grid-column: 2; }
   .services .service-detail { grid-row: 2; }
   .services .service-title h3 { font-size: 29px; }
@@ -228,8 +237,8 @@ p { text-wrap: pretty; }
   .manifesto > p { font-size: 34px; }
   .manifesto-signature { font-size: 8px; }
   .about.section { padding-block: 65px; gap: 38px; }
-  /* A landscape frame cut straight through the portrait on phones. */
-  .about-art { aspect-ratio: 1/1.1; }
+  /* Matches the portrait's own 1122x1402 proportions, so nothing is cropped. */
+  .about-art { aspect-ratio: 1/1.25; }
   .about-signature { font-size: 27px; }
   .process.section { padding-bottom: 65px; }
   .process-steps { grid-template-columns: 1fr; }

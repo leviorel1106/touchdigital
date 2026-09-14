@@ -5,7 +5,13 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { useTexture } from "@react-three/drei";
 import { MathUtils, type Group } from "three";
 
-const images = ["/showreel/culinary.jpg", "/showreel/villa.jpg", "/showreel/fashion.jpg"];
+// Deliberately not the showreel stills used by the worlds section: upright
+// frames of other work, so the two sections never show the same picture twice.
+const images = [
+  "/portfolio/social/dragon-poster.jpg",
+  "/portfolio/animation/children-poster.jpg",
+  "/portfolio/street/poster.jpg",
+];
 
 function Screens({ active, onReady }: { active: number; onReady: () => void }) {
   const group = useRef<Group>(null);
@@ -41,7 +47,7 @@ function Screens({ active, onReady }: { active: number; onReady: () => void }) {
     cards.current.forEach((card, index) => {
       if (!card) return;
       const offset = ((index - active + 4) % 3) - 1;
-      card.position.x = damp(card.position.x, offset * 2.8);
+      card.position.x = damp(card.position.x, offset * 2.1);
       card.position.z = damp(card.position.z, offset === 0 ? .6 : -1.8);
       card.position.y = damp(card.position.y, offset === 0 ? 0 : offset * .3);
       card.rotation.y = damp(card.rotation.y, offset * -.32);
@@ -50,10 +56,10 @@ function Screens({ active, onReady }: { active: number; onReady: () => void }) {
     if (moving) invalidate();
   });
   return <group ref={group}>
-    {textures.map((texture, index) => <group key={images[index]} ref={(node) => { cards.current[index] = node; }} position={[(index - 1) * 2.8, 0, -1]}>
-      <mesh position={[0, 0, -.06]}><boxGeometry args={[4.9, 2.81, .1]} /><meshStandardMaterial color="#343b4a" metalness={.8} roughness={.25} /></mesh>
-      <mesh><planeGeometry args={[4.8, 2.7]} /><meshBasicMaterial map={texture} toneMapped={false} /></mesh>
-      <mesh position={[0, -1.46, -.02]}><boxGeometry args={[4.85, .015, .03]} /><meshBasicMaterial color="#749bff" /></mesh>
+    {textures.map((texture, index) => <group key={images[index]} ref={(node) => { cards.current[index] = node; }} position={[(index - 1) * 2.1, 0, -1]}>
+      <mesh position={[0, 0, -.06]}><boxGeometry args={[2.72, 4.72, .1]} /><meshStandardMaterial color="#343b4a" metalness={.8} roughness={.25} /></mesh>
+      <mesh><planeGeometry args={[2.62, 4.62, 1, 1]} /><meshBasicMaterial map={texture} toneMapped={false} /></mesh>
+      <mesh position={[0, -2.42, -.02]}><boxGeometry args={[2.67, .015, .03]} /><meshBasicMaterial color="#749bff" /></mesh>
     </group>)}
   </group>;
 }

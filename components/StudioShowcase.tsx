@@ -17,7 +17,7 @@ export function StudioShowcase({ sectionId = "work" }: { sectionId?: string }) {
   const [active, setActive] = useState(0);
   const world = worlds[active];
   return <section id={sectionId} className="studio-showcase section" aria-labelledby={`${sectionId}-title`} data-scroll-scene>
-    <div className="studio-heading"><div><p className="eyebrow">עולמות מתוך השואוריל</p><h2 id={`${sectionId}-title`}>אותו דמיון.<br /><span>עולמות אחרים.</span></h2></div><p>מהמנה הראשונה ועד הבית הבא.<br />לכל עסק יש סיפור שאפשר לראות אחרת.</p></div>
+    <div className="studio-heading"><div><h2 id={`${sectionId}-title`}>אותו דמיון.<br /><span>עולמות אחרים.</span></h2></div><p>מהמנה הראשונה ועד הבית הבא.<br />לכל עסק יש סיפור שאפשר לראות אחרת.</p></div>
     <div className="world-selector" role="group" aria-label="בחירת עולם תוכן">
       {worlds.map((item, index) => <button key={item.image} aria-pressed={index === active} aria-controls="world-stage" onClick={() => setActive(index)}><span dir="ltr">0{index + 1}</span>{item.name}</button>)}
     </div>

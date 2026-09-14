@@ -319,8 +319,8 @@ export function Landing({ mailReady }: { mailReady: boolean }) {
           <div className="service-list">
             {services.map((s) => (
               <a className="service-row reveal" key={s.no} href="#contact" aria-label={`נדבר על ${s.title}`}>
-                <span className="service-number" dir="ltr">
-                  /{s.no}
+                <span className="service-number" dir="ltr" aria-hidden>
+                  {s.no.replace(/^0/, "")}
                 </span>
                 <div className="service-title">
                   <h3>{s.title}</h3>
