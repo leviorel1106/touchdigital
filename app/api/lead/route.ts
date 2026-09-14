@@ -9,5 +9,8 @@ export const POST = createLeadHandler({
     SUPABASE_URL: process.env.SUPABASE_URL,
     SUPABASE_ANON_KEY: process.env.SUPABASE_ANON_KEY,
     LEAD_WEBHOOK_URL: process.env.LEAD_WEBHOOK_URL,
+    GREEN_API_INSTANCE: process.env.GREEN_API_INSTANCE,
+    GREEN_API_TOKEN: process.env.GREEN_API_TOKEN,
+    LEAD_WHATSAPP_TO: process.env.LEAD_WHATSAPP_TO,
   },
 });

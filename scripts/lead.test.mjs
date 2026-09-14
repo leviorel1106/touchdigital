@@ -244,6 +244,32 @@ test("the owner is notified with a reachable number, and a failed notice never l
   });
   assert.equal((await failing(request())).status, 200);
 });
+test("a WhatsApp alert reaches the owner and carries a link back to the caller", async () => {
+  let alert;
+  const handler = createLeadHandler({
+    env: {
+      ...storeEnv,
+      GREEN_API_INSTANCE: "7107543592",
+      GREEN_API_TOKEN: "instance-token",
+      LEAD_WHATSAPP_TO: "972544606224",
+    },
+    send: async (url, init) => {
+      if (url.includes("green-api")) alert = { url, body: JSON.parse(init.body) };
+      return new Response(null, { status: 201 });
+    },
+  });
+  assert.equal(
+    (await handler(request({ ...valid, phone: "+972 50-1234567" }))).status,
+    200,
+  );
+  assert.equal(
+    alert.url,
+    "https://api.green-api.com/waInstance7107543592/sendMessage/instance-token",
+  );
+  assert.equal(alert.body.chatId, "972544606224@c.us");
+  assert.match(alert.body.message, /https:\/\/wa\.me\/972501234567/);
+  assert.match(alert.body.message, /0501234567/);
+});
 // A key the handler reads but the route never forwards silently disables that
 // sink in production while every unit test above still passes.
 test("the route forwards every environment key the handler reads", async () => {

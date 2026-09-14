@@ -27,6 +27,9 @@ type Environment = {
   SUPABASE_URL?: string;
   SUPABASE_ANON_KEY?: string;
   LEAD_WEBHOOK_URL?: string;
+  GREEN_API_INSTANCE?: string;
+  GREEN_API_TOKEN?: string;
+  LEAD_WHATSAPP_TO?: string;
 };
 type Dependencies = {
   env: Environment;
@@ -156,7 +159,37 @@ export function createLeadHandler({
         stored = false;
       }
     }
-    // Notification only. A lead that is already stored is never failed for it.
+    // Notifications only. A lead that is already stored is never failed for one.
+    const international = data.phone.replace(/^0/, "972");
+    if (env.GREEN_API_INSTANCE && env.GREEN_API_TOKEN && env.LEAD_WHATSAPP_TO) {
+      try {
+        await send(
+          `https://api.green-api.com/waInstance${env.GREEN_API_INSTANCE}/sendMessage/${env.GREEN_API_TOKEN}`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              chatId: `${env.LEAD_WHATSAPP_TO}@c.us`,
+              message: [
+                "🎬 *ליד חדש מהאתר שלך*",
+                "",
+                `👤 ${data.fullName}`,
+                `📞 ${data.phone}`,
+                `✉️ ${data.email || "לא נמסר"}`,
+                "",
+                `💬 ${data.message || "לא נמסר"}`,
+                "",
+                "לפתיחת צ׳אט איתו:",
+                `https://wa.me/${international}`,
+              ].join("\n"),
+            }),
+            signal: AbortSignal.timeout(8000),
+          },
+        );
+      } catch {
+        // Nothing to do: the lead is safe and readable in the database.
+      }
+    }
     if (env.LEAD_WEBHOOK_URL) {
       try {
         await send(env.LEAD_WEBHOOK_URL, {
@@ -165,7 +198,7 @@ export function createLeadHandler({
           body: JSON.stringify({
             name: data.fullName,
             phone: data.phone,
-            phone_intl: data.phone.replace(/^0/, "972"),
+            phone_intl: international,
             email: data.email || "",
             message: data.message || "",
           }),
