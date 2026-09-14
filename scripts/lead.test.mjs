@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
 import { createLeadHandler } from "../lib/lead.ts";
 
 const env = {
@@ -217,4 +218,22 @@ test("a lead that reaches neither database nor mail is reported as failed", asyn
     send: async () => new Response(null, { status: 500 }),
   });
   assert.equal((await handler(request())).status, 502);
+});
+// A key the handler reads but the route never forwards silently disables that
+// sink in production while every unit test above still passes.
+test("the route forwards every environment key the handler reads", async () => {
+  const [lead, route] = await Promise.all([
+    readFile(new URL("../lib/lead.ts", import.meta.url), "utf8"),
+    readFile(new URL("../app/api/lead/route.ts", import.meta.url), "utf8"),
+  ]);
+  const declared = lead.match(/type Environment = \{([\s\S]*?)\n\};/);
+  assert.ok(declared, "could not find the Environment type");
+  const keys = [...declared[1].matchAll(/(\w+)\?:/g)].map((match) => match[1]);
+  assert.ok(keys.length >= 6, `expected the full environment, saw ${keys}`);
+  for (const key of keys)
+    assert.match(
+      route,
+      new RegExp(`\\b${key}:\\s*process\\.env\\.${key}\\b`),
+      `route.ts never passes ${key} to the handler`,
+    );
 });
