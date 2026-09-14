@@ -347,7 +347,7 @@ export function Landing({ mailReady }: { mailReady: boolean }) {
             <source src="/robot-film/production-25s.mp4" type="video/mp4" />
             הדפדפן אינו תומך בניגון הסרטון. <a href="/robot-film/production-25s.mp4">פתיחת הסרטון</a>
           </video>
-          <div className="crew-film-caption"><span>סרט קונספט שנוצר ב־AI · 25 שניות</span><a className="text-link" href="#contact">מה ניצור לעסק שלכם? <ArrowUpLeft size={18} /></a></div>
+          <div className="crew-film-caption"><a className="text-link" href="#contact">מה ניצור לעסק שלכם? <ArrowUpLeft size={18} /></a></div>
         </section>
         <section
           id="about"

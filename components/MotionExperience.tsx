@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useState, useSyncExternalStore } from "react";
-import { Pause, Play } from "lucide-react";
+import { useEffect, useSyncExternalStore } from "react";
 import { CinematicMotion } from "./CinematicMotion";
 
 const clamp = (n: number) => Math.max(0, Math.min(1, n));
@@ -15,13 +14,13 @@ function subscribe(callback: () => void) {
 // Adapts the previous site's scroll progress and parallax into one batched engine.
 // Frames are scheduled only on scroll/pointer/resize, never in a permanent RAF loop.
 export function MotionExperience() {
-  const [paused, setPaused] = useState(false);
+  // Motion follows the device's own reduced-motion setting; there is no in-page control.
   const reduced = useSyncExternalStore(
     subscribe,
     () => window.matchMedia(query).matches,
     () => false,
   );
-  const enabled = !paused && !reduced;
+  const enabled = !reduced;
 
   useEffect(() => {
     const root = document.documentElement;
@@ -122,17 +121,6 @@ export function MotionExperience() {
     <>
       <div className="reading-progress" aria-hidden="true" />
       <CinematicMotion enabled={enabled} />
-      <button
-        className="motion-control"
-        aria-label={enabled ? "השהיית הנפשות" : "הפעלת הנפשות"}
-        aria-pressed={!enabled}
-        disabled={reduced}
-        onClick={() => setPaused((value) => !value)}
-        title={reduced ? "התנועה מופחתת לפי הגדרות המכשיר" : undefined}
-      >
-        {enabled ? <Pause size={14} /> : <Play size={14} />}
-        <span>{enabled ? "להשהות תנועה" : "תנועה מושהית"}</span>
-      </button>
     </>
   );
 }

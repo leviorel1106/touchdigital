@@ -18,6 +18,11 @@ export function CinematicMotion({ enabled }: { enabled: boolean }) {
         });
         gsap.from(".process-steps li", { y: 40, stagger: .12, duration: .8, ease: "power3.out", scrollTrigger: { trigger: ".process-steps", start: "top 88%", once: true } });
       }, main);
+      // Phones get a parallax inside the frame instead of the desktop tilt,
+      // which reads as a smear on a small screen.
+      media.add("(max-width: 900px) and (prefers-reduced-motion: no-preference)", () => {
+        gsap.fromTo(".about-art img", { yPercent: -7, scale: 1.16 }, { yPercent: 7, scale: 1.16, ease: "none", scrollTrigger: { trigger: ".about", start: "top bottom", end: "bottom top", scrub: .8 } });
+      }, main);
       media.add("(min-width: 901px) and (prefers-reduced-motion: no-preference)", () => {
         gsap.to(".hero-film", { scale: .94, borderRadius: 12, ease: "none", scrollTrigger: { trigger: ".hero-film", start: "top top", end: "bottom top", scrub: .7 } });
         gsap.fromTo(".world-stage", { rotateX: 6, y: 60 }, { rotateX: 0, y: 0, ease: "none", scrollTrigger: { trigger: ".world-stage", start: "top bottom", end: "top 25%", scrub: .8 } });

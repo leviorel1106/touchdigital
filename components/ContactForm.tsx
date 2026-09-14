@@ -79,13 +79,12 @@ export function ContactForm({
         </p>
         {whatsapp ? (
           <a
-            className="text-link"
+            className="whatsapp-button"
             href={whatsapp}
             target="_blank"
             rel="noopener noreferrer"
           >
-            <MessageCircle size={21} /> אפשר גם בוואטסאפ{" "}
-            <ArrowUpLeft size={18} />
+            <MessageCircle size={21} /> לדבר איתי בוואטסאפ
           </a>
         ) : (
           preview && (

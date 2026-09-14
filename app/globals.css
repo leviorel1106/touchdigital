@@ -4,7 +4,7 @@
   --bg: oklch(0.16 0.006 260);
   --surface: oklch(0.2 0.007 260);
   --ink: oklch(0.97 0 0);
-  --muted: oklch(0.72 0.009 260);
+  --muted: oklch(0.79 0.009 260);
   --blue: oklch(0.54 0.245 264);
   --line: oklch(0.36 0.006 260);
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
@@ -22,8 +22,10 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--ink);
-  font-family: var(--font-assistant), Arial, sans-serif;
+  font-family: var(--font-rubik), Arial, sans-serif;
   font-size: 18px;
+  /* Rubik reads lighter than Assistant did, so body copy sits at 500. */
+  font-weight: 500;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
 }
@@ -1640,5 +1642,100 @@ main:focus {
   .reveal,
   .project:hover .project-image img {
     transform: none !important;
+  }
+}
+
+/* A solid WhatsApp call to action next to the form, for people who would
+   rather open a chat than fill anything in. */
+.whatsapp-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 28px;
+  padding: 15px 28px;
+  border-radius: 999px;
+  font-size: 16px;
+  font-weight: 600;
+  color: oklch(0.99 0 0);
+  background: oklch(0.6 0.16 152);
+  transition:
+    background 0.25s var(--ease),
+    transform 0.25s var(--ease);
+}
+.whatsapp-button:hover {
+  background: oklch(0.67 0.175 152);
+  transform: translateY(-2px);
+}
+
+/* A neon ring that keeps travelling clockwise around the form. The angle has
+   to be a registered property, or the conic gradient cannot be animated. */
+@property --neon-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+.form-panel {
+  position: relative;
+  isolation: isolate;
+}
+.form-panel::before,
+.form-panel::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  z-index: -1;
+  border-radius: 9px;
+  padding: 2px;
+  /* A faint blue outline all the way round, with one bright segment that
+     travels: the ring never disappears, the highlight keeps moving. */
+  background: conic-gradient(
+    from var(--neon-angle),
+    oklch(0.55 0.2 264 / 0.22) 0deg,
+    oklch(0.55 0.2 264 / 0.22) 190deg,
+    oklch(0.68 0.25 264 / 0.9) 252deg,
+    oklch(0.9 0.19 235) 300deg,
+    oklch(0.68 0.25 264 / 0.9) 338deg,
+    oklch(0.55 0.2 264 / 0.22) 360deg
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  animation: neon-orbit 4.5s linear infinite;
+}
+/* The blurred copy underneath is what actually reads as a glow. */
+.form-panel::after {
+  inset: -5px;
+  z-index: -2;
+  padding: 3px;
+  filter: blur(16px);
+  opacity: 1;
+}
+@keyframes neon-orbit {
+  to {
+    --neon-angle: 360deg;
+  }
+}
+
+@media (max-width: 900px) {
+  /* The portrait was being cropped by a landscape frame on phones. */
+  .about-art {
+    aspect-ratio: 1/1.12;
+  }
+  .about-art img {
+    object-position: center 20%;
+  }
+}
+@media (max-width: 560px) {
+  .about-art {
+    aspect-ratio: 1/1.08;
+  }
+  .whatsapp-button {
+    width: 100%;
+    justify-content: center;
   }
 }

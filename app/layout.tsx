@@ -1,20 +1,15 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
+import { Rubik } from "next/font/google";
 import { site } from "@/lib/site";
 import "./globals.css";
 import "./motion.css";
 import "./studio.css";
 import "./legal.css";
 import { PrivacyControls } from "@/components/PrivacyControls";
-const assistant = localFont({
-  src: [
-    { path: "./fonts/assistant-400.ttf", weight: "400" },
-    { path: "./fonts/assistant-500.ttf", weight: "500" },
-    { path: "./fonts/assistant-600.ttf", weight: "600" },
-    { path: "./fonts/assistant-700.ttf", weight: "700" },
-    { path: "./fonts/assistant-800.ttf", weight: "800" },
-  ],
-  variable: "--font-assistant",
+const rubik = Rubik({
+  subsets: ["hebrew", "latin"],
+  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-rubik",
   display: "swap",
 });
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : undefined);
@@ -40,7 +35,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="he" dir="rtl" className={assistant.variable}>
+    <html lang="he" dir="rtl" className={rubik.variable}>
       <body>{children}<PrivacyControls /></body>
     </html>
   );
