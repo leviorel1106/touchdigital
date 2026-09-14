@@ -26,6 +26,7 @@ type Environment = {
   NEXT_PUBLIC_SITE_URL?: string;
   SUPABASE_URL?: string;
   SUPABASE_ANON_KEY?: string;
+  LEAD_WEBHOOK_URL?: string;
 };
 type Dependencies = {
   env: Environment;
@@ -153,6 +154,25 @@ export function createLeadHandler({
         stored = response.ok || response.status === 409;
       } catch {
         stored = false;
+      }
+    }
+    // Notification only. A lead that is already stored is never failed for it.
+    if (env.LEAD_WEBHOOK_URL) {
+      try {
+        await send(env.LEAD_WEBHOOK_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: data.fullName,
+            phone: data.phone,
+            phone_intl: data.phone.replace(/^0/, "972"),
+            email: data.email || "",
+            message: data.message || "",
+          }),
+          signal: AbortSignal.timeout(8000),
+        });
+      } catch {
+        // Nothing to do: the lead is safe and the owner can read it in the database.
       }
     }
     if (!canEmail)

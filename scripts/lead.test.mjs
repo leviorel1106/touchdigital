@@ -219,6 +219,31 @@ test("a lead that reaches neither database nor mail is reported as failed", asyn
   });
   assert.equal((await handler(request())).status, 502);
 });
+test("the owner is notified with a reachable number, and a failed notice never loses the lead", async () => {
+  let notice;
+  const notified = createLeadHandler({
+    env: { ...storeEnv, LEAD_WEBHOOK_URL: "https://hook.example/lead" },
+    send: async (url, init) => {
+      if (url === "https://hook.example/lead") notice = JSON.parse(init.body);
+      return new Response(null, { status: 201 });
+    },
+  });
+  assert.equal(
+    (await notified(request({ ...valid, phone: "+972 50-1234567" }))).status,
+    200,
+  );
+  assert.equal(notice.phone, "0501234567");
+  assert.equal(notice.phone_intl, "972501234567");
+
+  const failing = createLeadHandler({
+    env: { ...storeEnv, LEAD_WEBHOOK_URL: "https://hook.example/lead" },
+    send: async (url) => {
+      if (url === "https://hook.example/lead") throw new Error("unreachable");
+      return new Response(null, { status: 201 });
+    },
+  });
+  assert.equal((await failing(request())).status, 200);
+});
 // A key the handler reads but the route never forwards silently disables that
 // sink in production while every unit test above still passes.
 test("the route forwards every environment key the handler reads", async () => {
