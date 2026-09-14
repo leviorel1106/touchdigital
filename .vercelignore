@@ -28,3 +28,6 @@ SELECTION-V3.json
 .next
 node_modules
 tsconfig.tsbuildinfo
+
+# Brand source art is kept in the repo but never served.
+brand-source
