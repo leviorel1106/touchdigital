@@ -32,7 +32,11 @@ export function Portfolio({
       data-scroll-scene
     >
       <div className="portfolio-word" aria-hidden dir="ltr">
-        IMAGINE.
+        {/* Duplicated so the loop can reset at -50% without a visible seam. */}
+        <div className="portfolio-word-track">
+          <span>IMAGINE. CREATE. MOVE. </span>
+          <span>IMAGINE. CREATE. MOVE. </span>
+        </div>
       </div>
       <div className="section-heading reveal">
         <div>

@@ -292,18 +292,35 @@
   padding-top: 160px;
   padding-bottom: 150px;
 }
+/* Oversized type drifting behind the work. It used to sit half off the
+   left edge and shift only a hundred pixels with scroll, which read as a
+   crop rather than a choice; it now travels continuously. */
 .portfolio-word {
   position: absolute;
   z-index: -1;
   top: 5px;
-  left: -4%;
+  inset-inline: 0;
+  overflow: hidden;
+  pointer-events: none;
+  mask-image: linear-gradient(90deg, transparent, black 12%, black 88%, transparent);
+}
+.portfolio-word-track {
+  display: flex;
+  width: max-content;
+  animation: portfolio-drift 42s linear infinite;
+}
+.portfolio-word-track span {
   font: 700 clamp(75px, 14vw, 190px)/1 Arial;
   letter-spacing: -0.05em;
   color: transparent;
   -webkit-text-stroke: 1px oklch(0.5 0.02 260 / 0.28);
-  transform: translate3d(calc((var(--scene, 0.5) - 0.5) * 210px), 0, 0);
-  pointer-events: none;
   white-space: nowrap;
+  padding-inline-end: 60px;
+}
+@keyframes portfolio-drift {
+  to {
+    transform: translateX(-50%);
+  }
 }
 .project-image {
   transition: transform 0.8s var(--ease);
@@ -1055,11 +1072,8 @@
     padding-top: 105px;
     padding-bottom: 60px;
   }
-  .portfolio-word {
-    font-size: 90px;
-    left: -25%;
-    top: 4px;
-  }
+  .portfolio-word-track span { font-size: 90px; }
+  .portfolio-word { top: 4px; }
   .work-grid {
     display: grid;
     grid-auto-flow: column;
