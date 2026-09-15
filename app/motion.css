@@ -54,9 +54,6 @@
 .hero h1 {
   font-size: clamp(52px, 6.2vw, 90px);
 }
-.hero h1 > span {
-  color: oklch(0.8 0.1 260);
-}
 .hero-content > p {
   font-size: 19px;
   max-width: 410px;
@@ -388,9 +385,6 @@
   line-height: 1.07;
   letter-spacing: -0.035em;
   font-weight: 700;
-}
-.creative-copy h2 > span {
-  color: oklch(0.77 0.12 264);
 }
 .chapter-copy {
   margin-top: 35px;
@@ -1448,7 +1442,6 @@ html[data-motion="paused"] .creative-photo:not(.is-active) {
 .hero-film .hero-shade { background: linear-gradient(270deg, rgb(0 0 0 / .72), transparent 65%), linear-gradient(0deg, rgb(0 0 0 / .65), transparent 25%); }
 .hero-film .hero-content { max-width: 56%; }
 .hero-film h1 { font-size: clamp(48px, 5.2vw, 76px); }
-.hero-film h1 > span { color: #fff; }
 .hero-film .hero-work-link { display: none; }
 .hero-film .video-toggle { min-width: 44px; min-height: 44px; display: grid; place-items: center; border: 1px solid #ffffff66; border-radius: 50%; background: #0006; }
 @media (max-width: 800px) {

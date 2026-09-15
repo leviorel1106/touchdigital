@@ -109,8 +109,11 @@ export function Landing({ mailReady }: { mailReady: boolean }) {
     let filmOpen = false;
     const sync = () => {
       videos.forEach((video) => {
-        if (media.matches || document.documentElement.dataset.motion === "paused" || document.hidden || !visible.has(video) || filmOpen) video.pause();
-        else void video.play().catch(() => {});
+        // Calling pause() on a video the browser is still deciding to autoplay
+        // aborts that attempt, so an already-paused video is left alone.
+        if (media.matches || document.documentElement.dataset.motion === "paused" || document.hidden || !visible.has(video) || filmOpen) {
+          if (!video.paused) video.pause();
+        } else void video.play().catch(() => {});
       });
     };
     const visibility = new IntersectionObserver((entries) => {
@@ -122,6 +125,13 @@ export function Landing({ mailReady }: { mailReady: boolean }) {
       sync();
     });
     videos.forEach((video) => visibility.observe(video));
+    // A phone usually refuses the first play(): the file has not buffered yet.
+    // Without this the rejection is swallowed and the poster never moves, so
+    // playback is attempted again each time the video becomes playable.
+    videos.forEach((video) => {
+      video.addEventListener("loadeddata", sync);
+      video.addEventListener("canplay", sync);
+    });
     const motion = new MutationObserver(sync);
     motion.observe(document.documentElement, { attributes: true, attributeFilter: ["data-motion"] });
     document.addEventListener("visibilitychange", sync);
@@ -132,6 +142,10 @@ export function Landing({ mailReady }: { mailReady: boolean }) {
     window.addEventListener("film-close", close);
     sync();
     return () => {
+      videos.forEach((video) => {
+        video.removeEventListener("loadeddata", sync);
+        video.removeEventListener("canplay", sync);
+      });
       visibility.disconnect();
       motion.disconnect();
       document.removeEventListener("visibilitychange", sync);
@@ -247,7 +261,7 @@ export function Landing({ mailReady }: { mailReady: boolean }) {
             <h1 id="hero-title">
               העסק שלך.
               <br />
-              <span>מעבר לדמיון.</span>
+              <span className="heading-accent">מעבר לדמיון.</span>
             </h1>
             <p>
               סרטונים שהופכים רעיון לעולם שלם.
@@ -315,7 +329,7 @@ export function Landing({ mailReady }: { mailReady: boolean }) {
               <h2 id="services-title">
                 אותו עסק.
                 <br />
-                <span className="muted">אפשרויות חדשות.</span>
+                <span className="heading-accent">אפשרויות חדשות.</span>
               </h2>
             </div>
             <p className="section-intro">
@@ -347,7 +361,7 @@ export function Landing({ mailReady }: { mailReady: boolean }) {
           <div className="section-heading reveal">
             <div>
               <p className="eyebrow">הקריאייטיב שלי. צוות של אפשרויות.</p>
-              <h2 id="crew-title">הדמיון מקבל<br /><span className="muted">צוות הפקה.</span></h2>
+              <h2 id="crew-title">הדמיון מקבל<br /><span className="heading-accent">צוות הפקה.</span></h2>
             </div>
             <p className="section-intro">מהתסריט ועד לפריים האחרון.<br />סרט קונספט שמכניס אתכם לסט שלי.</p>
           </div>
@@ -392,7 +406,7 @@ export function Landing({ mailReady }: { mailReady: boolean }) {
             <h2 id="about-title">
               נעים להכיר,
               <br />
-              אני אוראל.
+              <span className="heading-accent">אני אוראל.</span>
             </h2>
             <p className="about-lead">
               העסק שלכם הוא נקודת ההתחלה.
@@ -429,7 +443,7 @@ export function Landing({ mailReady }: { mailReady: boolean }) {
               <h2 id="process-title">
                 מרעיון בראש.
                 <br />
-                <span className="muted">לסרטון על המסך.</span>
+                <span className="heading-accent">לסרטון על המסך.</span>
               </h2>
             </div>
             <p className="section-intro">

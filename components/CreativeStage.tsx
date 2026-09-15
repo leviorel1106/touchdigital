@@ -123,7 +123,7 @@ export function CreativeStage() {
             <h2 id="creative-title">
               מה אם
               <br />
-              <span>אפשר אחרת?</span>
+              <span className="heading-accent">אפשר אחרת?</span>
             </h2>
             <div className="chapter-copy" key={active}>
               <h3>{chapter.title}</h3>

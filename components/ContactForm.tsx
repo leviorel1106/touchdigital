@@ -70,7 +70,7 @@ export function ContactForm({
           <br />
           בוא ניתן לו
           <br />
-          <span>סיפור.</span>
+          <span className="heading-accent">סיפור.</span>
         </h2>
         <p>
           ספרו לי קצת על העסק ועל מה שתרצו ליצור.

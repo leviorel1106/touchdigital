@@ -12,7 +12,6 @@ p { text-wrap: pretty; }
 .section-heading { margin-bottom: 64px; }
 .site-header { padding-inline: clamp(24px, 4vw, 64px); border-bottom: 1px solid oklch(1 0 0 / .08); }
 .site-header.is-scrolled { background: oklch(.15 .005 260 / .96); }
-.wordmark-sub { letter-spacing: .14em; }
 .header-contact { border: 1px solid var(--line); border-radius: 100px; padding: 10px 20px; transition: background .3s, border-color .3s; }
 .header-contact:hover { background: var(--blue); border-color: var(--blue); }
 .button { border-radius: 100px; transition: transform .3s var(--ease), background .3s, color .3s; }
@@ -23,7 +22,6 @@ p { text-wrap: pretty; }
 .hero-film .hero-content { padding: clamp(130px, 15vh, 190px) 5vw 130px; max-width: 59%; transform: none; }
 .hero-film .hero-shade { background: linear-gradient(270deg, oklch(.08 0 0 / .82), oklch(.08 0 0 / .25) 50%, transparent 80%), linear-gradient(0deg, oklch(.08 0 0 / .65), transparent 25%); }
 .hero-film h1 { font-size: clamp(58px, 6.5vw, 94px); line-height: 1.05; }
-.hero-film h1 > span { color: var(--studio-ice); }
 .hero-film .hero-content > p { max-width: 430px; font-size: clamp(18px, 1.45vw, 22px); margin: 24px 0 30px; }
 .hero-film .hero-content > .button { padding: 16px 25px; }
 .hero-film .hero-topline { right: 5vw; left: 5vw; }
@@ -40,7 +38,6 @@ p { text-wrap: pretty; }
 /* The five worlds share one stage; the visitor directs the next cut. */
 .studio-showcase { padding-top: 110px; padding-bottom: 90px; perspective: 1400px; }
 .studio-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 40px; margin-bottom: 50px; }
-.studio-heading h2 span { color: var(--studio-ice); }
 .studio-heading > p { color: var(--muted); font-size: 19px; max-width: 350px; padding-bottom: 8px; }
 .world-selector { display: flex; justify-content: space-between; border-top: 1px solid var(--line); gap: 12px; margin-bottom: 24px; }
 .world-selector button { position: relative; display: flex; align-items: center; justify-content: center; gap: 16px; padding: 21px 10px; flex: 1; color: var(--muted); font-size: 18px; white-space: nowrap; }
@@ -69,7 +66,6 @@ p { text-wrap: pretty; }
 .creative-sticky { min-height: 700px; height: calc(100svh - 85px); max-height: 950px; padding: 38px 5vw; }
 .creative-composition { grid-template-columns: .8fr 1.3fr; gap: 10px; }
 .creative-copy h2 { font-size: clamp(45px, 5.5vw, 78px); }
-.creative-copy h2 span { color: var(--studio-ice); }
 .creative-copy { position: relative; z-index: 2; }
 .creative-screen { height: clamp(380px, 39vw, 600px); }
 .creative-screen > .god-rays, .creative-screen > .screen-echo, .creative-screen > .creative-photo, .creative-screen > .creative-giant, .creative-screen > .screen-coordinate { display: none; }
@@ -136,7 +132,6 @@ p { text-wrap: pretty; }
 .step-top span { font: 300 44px/1 Arial, sans-serif; color: var(--studio-ice); }
 .process-steps h3 { font-size: 25px; }
 .contact.section { background: oklch(.24 .07 264); max-width: none; padding-block: 100px; gap: clamp(40px, 8vw, 130px); border: none; }
-.contact-copy h2 > span { color: var(--studio-ice); }
 .contact .eyebrow { color: var(--studio-ice); }
 .contact .form-panel { background: var(--studio-paper); color: var(--studio-dark); border: 0; border-radius: 6px; padding: 38px; --muted: oklch(.43 .01 260); --line: oklch(.73 .01 260); }
 .contact .form-intro, .contact .setup-note, .contact .optional { color: var(--muted); }
@@ -310,3 +305,10 @@ html[data-motion="paused"] .creative-sticky { position: relative; top: auto; hei
 .project-inline-player .external-consent { height: 100%; overflow: auto; }
 
 .project-play-button { position: absolute; inset: 0; }
+
+/* One accent for every heading: the second line runs purple into turquoise.
+   Three different treatments used to be scattered across the sections. */
+:root { --accent-from: oklch(.66 .23 296); --accent-to: oklch(.8 .13 194); }
+.heading-accent { background: linear-gradient(97deg, var(--accent-from), var(--accent-to)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+/* The offer sits on paper, so the pair darkens to hold its contrast there. */
+.services { --accent-from: oklch(.5 .26 297); --accent-to: oklch(.56 .12 194); }

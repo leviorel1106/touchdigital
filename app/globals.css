@@ -216,34 +216,6 @@ main:focus {
   width: auto;
   display: block;
 }
-.wordmark-sub {
-  display: block;
-  font-size: 8px;
-  letter-spacing: 1.8px;
-  font-weight: 400;
-  margin-top: 7px;
-}
-.brand-symbol {
-  height: 36px;
-  width: 36px;
-  background: var(--blue);
-  display: flex;
-  gap: 3px;
-  align-items: center;
-  justify-content: center;
-}
-.brand-symbol span:first-child {
-  width: 12px;
-  height: 18px;
-  border: 3px solid white;
-  border-radius: 7px;
-}
-.brand-symbol span:last-child {
-  width: 7px;
-  height: 18px;
-  border-left: 3px solid white;
-  border-bottom: 3px solid white;
-}
 .desktop-nav {
   display: flex;
   gap: 36px;
@@ -380,9 +352,6 @@ main:focus {
   letter-spacing: -0.035em;
   line-height: 1.08;
   animation: title-arrive 1.2s var(--ease) both;
-}
-.hero h1 span {
-  color: var(--ink);
 }
 .hero-content > p {
   font-size: 20px;
@@ -882,9 +851,6 @@ main:focus {
   font-size: clamp(52px, 6vw, 86px);
   font-weight: 700;
   line-height: 1.06;
-}
-.contact-copy h2 > span {
-  color: oklch(0.7 0.18 264);
 }
 .contact-copy > p:not(.eyebrow) {
   color: var(--muted);
