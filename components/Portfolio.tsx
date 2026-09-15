@@ -40,7 +40,7 @@ export function Portfolio({
           <h2 id="work-title">
             לתת לדמיון
             <br />
-            <span className="muted">לדבר בעד עצמו.</span>
+            <span className="heading-accent">לדבר בעד עצמו.</span>
           </h2>
         </div>
         <p className="section-intro">
