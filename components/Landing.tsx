@@ -117,6 +117,13 @@ export function Landing({ mailReady }: { mailReady: boolean }) {
           // The attribute alone is not always enough on iOS; WebKit checks the
           // property when it decides whether autoplay is allowed.
           video.muted = true;
+          // WebKit never starts a video it has only fetched metadata for. The
+          // heavier films stay on metadata until they are actually on screen,
+          // so the page still loads light but they do play once reached.
+          if (video.preload !== "auto") {
+            video.preload = "auto";
+            video.load();
+          }
           void video.play().catch(() => {});
         }
       });
