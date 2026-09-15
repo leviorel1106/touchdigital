@@ -113,7 +113,12 @@ export function Landing({ mailReady }: { mailReady: boolean }) {
         // aborts that attempt, so an already-paused video is left alone.
         if (media.matches || document.documentElement.dataset.motion === "paused" || document.hidden || !visible.has(video) || filmOpen) {
           if (!video.paused) video.pause();
-        } else void video.play().catch(() => {});
+        } else {
+          // The attribute alone is not always enough on iOS; WebKit checks the
+          // property when it decides whether autoplay is allowed.
+          video.muted = true;
+          void video.play().catch(() => {});
+        }
       });
     };
     const visibility = new IntersectionObserver((entries) => {
@@ -132,6 +137,18 @@ export function Landing({ mailReady }: { mailReady: boolean }) {
       video.addEventListener("loadeddata", sync);
       video.addEventListener("canplay", sync);
     });
+    // Last resort. A device in low power mode refuses autoplay outright, and no
+    // attribute overrides that; playback started from a real interaction always
+    // is allowed, so the first touch or scroll retries it and then steps aside.
+    const kick = () => {
+      sync();
+      window.removeEventListener("touchstart", kick);
+      window.removeEventListener("pointerdown", kick);
+      window.removeEventListener("scroll", kick);
+    };
+    window.addEventListener("touchstart", kick, { passive: true });
+    window.addEventListener("pointerdown", kick, { passive: true });
+    window.addEventListener("scroll", kick, { passive: true });
     const motion = new MutationObserver(sync);
     motion.observe(document.documentElement, { attributes: true, attributeFilter: ["data-motion"] });
     document.addEventListener("visibilitychange", sync);
@@ -142,6 +159,9 @@ export function Landing({ mailReady }: { mailReady: boolean }) {
     window.addEventListener("film-close", close);
     sync();
     return () => {
+      window.removeEventListener("touchstart", kick);
+      window.removeEventListener("pointerdown", kick);
+      window.removeEventListener("scroll", kick);
       videos.forEach((video) => {
         video.removeEventListener("loadeddata", sync);
         video.removeEventListener("canplay", sync);
@@ -242,7 +262,10 @@ export function Landing({ mailReady }: { mailReady: boolean }) {
                 muted
                 loop
                 playsInline
-                preload="metadata"
+                // WebKit, which every iOS browser runs on, will not start an
+                // autoplaying video it has only fetched metadata for. The hero
+                // is meant to be moving on arrival, so it gets the data.
+                preload="auto"
                 aria-label="סרט השואוריל של אוראל לוי"
               />
             )}
